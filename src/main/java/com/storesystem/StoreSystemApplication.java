@@ -1,6 +1,7 @@
 package com.storesystem;
 
 import com.storesystem.persistence.services.LoginService;
+import com.storesystem.persistence.services.SizeService;
 import com.storesystem.ui.LoginScreen;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class StoreSystemApplication {
     
     @Autowired
     private LoginService loginService;
+    
+    @Autowired
+    private SizeService sizeService;
 
 	public static void main(String[] args) {
             ApplicationContext context = new SpringApplicationBuilder(StoreSystemApplication.class)
@@ -28,5 +32,6 @@ public class StoreSystemApplication {
         public void initDB()
         {
             this.loginService.saveInDb();
+            this.sizeService.seedSizes();
         }
 }

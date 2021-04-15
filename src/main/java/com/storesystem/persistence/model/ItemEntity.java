@@ -1,11 +1,18 @@
 package com.storesystem.persistence.model;
 
+import java.awt.List;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -39,12 +46,13 @@ public class ItemEntity  {
     
     @Column (name = "available_date")
     private Date availableDate;
+
+    @ManyToMany
+    @JoinTable(name = "item_sizes", 
+            joinColumns = {@JoinColumn(name = "item_id")},
+            inverseJoinColumns = {@JoinColumn(name = "size_id")})
+    private Set<SizeEntity> sizes = new HashSet<>();
     
-    @Column(name = "size")
-    private String size;
-
-   
-
     public Long getId() {
         return id;
     }
@@ -116,12 +124,13 @@ public class ItemEntity  {
     public void setAvailableDate(Date availableDate) {
         this.availableDate = availableDate;
     }
-    
-     public String getSize() {
-        return size;
+
+    public Set<SizeEntity> getSizes() {
+        return sizes;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setSizes(Set<SizeEntity> sizes) {
+        this.sizes = sizes;
     }
+
 }
