@@ -1,13 +1,18 @@
 package com.storesystem.ui;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class SalesScreen extends javax.swing.JFrame {
 
+    @Autowired
+    private AdminScreen adminScreen;
+    
     /**
      * Creates new form SalesDashboard
      */
@@ -103,9 +108,15 @@ public class SalesScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdminScreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminScreenActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        new AdminScreen().setVisible(true);
+        
+        // Set size of admin screen to full screen
+        adminScreen.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        // Show admin screen
+        adminScreen.setVisible(true);
+        
+         // close sales screen
+        this.dispose();
     }//GEN-LAST:event_btnAdminScreenActionPerformed
 
 
