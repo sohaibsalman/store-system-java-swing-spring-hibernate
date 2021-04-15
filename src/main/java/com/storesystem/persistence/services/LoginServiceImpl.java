@@ -51,6 +51,9 @@ import org.springframework.transaction.annotation.Transactional;
        else
            ApplicationHelpers.isAdmin = false;
        
+       // save the username of the logged in user
+       ApplicationHelpers.username = user.getUsername();
+       
        return ApplicationMessages.SUCCESSFUL_LOGIN;
     }
 }

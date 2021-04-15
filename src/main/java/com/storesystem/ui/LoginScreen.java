@@ -1,7 +1,9 @@
 package com.storesystem.ui;
 
+import com.storesystem.ApplicationHelpers;
 import com.storesystem.ApplicationMessages;
 import com.storesystem.business.LoginController;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -110,8 +112,23 @@ public class LoginScreen extends javax.swing.JFrame {
         
         if(result == ApplicationMessages.SUCCESSFUL_LOGIN)
         {
+            /*
+                Hide the admin button on sales screen if the logged
+                in user is not admin.
+            */
+            if(!ApplicationHelpers.isAdmin)
+                sales.getBtnAdminScreen().setVisible(false);
+            
+            /*
+                Set username of logged in person to display it
+                on SalesScreen
+            */
+            sales.getLblScreenHeading().setText(sales.getLblScreenHeading().getText() + "(" + ApplicationHelpers.username + ")");
+            
+            
+            sales.setExtendedState(JFrame.MAXIMIZED_BOTH);
             sales.setVisible(true);
-            this.setVisible(false);
+            this.dispose();
         }
         else if (result == ApplicationMessages.INVALID_PASSWORD)
         {

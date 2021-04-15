@@ -16,7 +16,9 @@ public class StoreSystemApplication {
     private LoginService loginService;
 
 	public static void main(String[] args) {
-            ApplicationContext context = new SpringApplicationBuilder(StoreSystemApplication.class).headless(false).run(args);
+            ApplicationContext context = new SpringApplicationBuilder(StoreSystemApplication.class)
+                    .headless(false)
+                    .run(args);
             
             LoginScreen login = context.getBean(LoginScreen.class);
             login.setVisible(true);
