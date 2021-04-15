@@ -1,6 +1,7 @@
 package com.storesystem.business;
 
 import com.storesystem.ApplicationHelpers;
+import com.storesystem.ApplicationMessages;
 import com.storesystem.persistence.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,7 +15,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
     
-    public int login(String username, String password)
+    public ApplicationMessages login(String username, String password)
     {
         
 //        if(username.equals("admin") && password.equals("admin"))

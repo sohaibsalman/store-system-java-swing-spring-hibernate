@@ -1,9 +1,9 @@
 package com.storesystem.persistence.services;
 
+import com.storesystem.ApplicationHelpers;
+import com.storesystem.ApplicationMessages;
 import com.storesystem.persistence.model.LoginEntity;
 import com.storesystem.persistence.repository.LoginRepository;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,19 +37,20 @@ import org.springframework.transaction.annotation.Transactional;
     }
 
     @Override
-    public int validateUser(String username, String password) {
+    public ApplicationMessages validateUser(String username, String password) {
         LoginEntity user = loginRepo.findByUsername(username);
        
        if(user == null)
-       {
-           return -1;
-       }
+           return ApplicationMessages.INVALID_USERNAME;
        
        if(!user.getPassword().equals(password)) 
-       {
-           return 1;
-       }
+           return ApplicationMessages.INVALID_PASSWORD;
        
-       return 0;
+       if(user.isIsAdmin())
+           ApplicationHelpers.isAdmin = true;
+       else
+           ApplicationHelpers.isAdmin = false;
+       
+       return ApplicationMessages.SUCCESSFUL_LOGIN;
     }
 }

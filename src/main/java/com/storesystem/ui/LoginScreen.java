@@ -1,7 +1,7 @@
 package com.storesystem.ui;
 
+import com.storesystem.ApplicationMessages;
 import com.storesystem.business.LoginController;
-import javax.annotation.PostConstruct;
 import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -106,14 +106,14 @@ public class LoginScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
-        int result = loginController.login(txtUsername.getText(), txtPassword.getText());
+        ApplicationMessages result = loginController.login(txtUsername.getText(), txtPassword.getText());
         
-        if(result == 0)
+        if(result == ApplicationMessages.SUCCESSFUL_LOGIN)
         {
             sales.setVisible(true);
             this.setVisible(false);
         }
-        else if (result == -1)
+        else if (result == ApplicationMessages.INVALID_PASSWORD)
         {
             JOptionPane.showMessageDialog(this, "Invalid Credentials", "Credentials Error", JOptionPane.ERROR_MESSAGE);
         }
