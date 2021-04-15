@@ -7,4 +7,6 @@ public enum ApplicationMessages {
     SUCCESSFUL_LOGIN,
     DATA_ADDED,
     SAVE_ERROR,
+    DATA_UPDATED,
+    DATA_DELETED,
 }

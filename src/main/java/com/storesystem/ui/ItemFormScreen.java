@@ -229,7 +229,10 @@ public class ItemFormScreen extends javax.swing.JFrame {
         }
         else
         {
+            // Create an item object to save it in db
             ItemEntity item = new ItemEntity();
+            
+            // Init the item object with the values from UI
             item.setBarcode(txtBarcode.getText());
             item.setTitle(txtTitle.getText());
             item.setColor(txtColor.getText());
@@ -237,17 +240,22 @@ public class ItemFormScreen extends javax.swing.JFrame {
             item.setPrice(Double.parseDouble(txtPrice.getText()));
             item.setDescription(txtDescription.getText());
             
-            ApplicationMessages result = itemController.addItem(item);
+            // Send data to controller to save it in db
+            ApplicationMessages result = itemController.add(item);
             
+            // Check if data was added or not
             if(result == ApplicationMessages.DATA_ADDED)
             {
-                JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.OK_OPTION);
+                // Data added message
+                JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
             else 
             {
+                // Error message
                 JOptionPane.showMessageDialog(this, "Error adding the item!", "Error", JOptionPane.ERROR_MESSAGE);
             }
             
+            // Close the Form
             this.dispose();
         }
     }//GEN-LAST:event_btnSaveActionPerformed

@@ -1,8 +1,13 @@
 package com.storesystem.ui;
 
+import com.storesystem.business.ItemController;
+import com.storesystem.persistence.model.ItemEntity;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +17,9 @@ public class SalesScreen extends javax.swing.JFrame {
 
     @Autowired
     private AdminScreen adminScreen;
+    
+    @Autowired
+    private ItemController itemController;
     
     /**
      * Creates new form SalesDashboard
@@ -28,9 +36,14 @@ public class SalesScreen extends javax.swing.JFrame {
         btnAdminScreen = new javax.swing.JButton();
         lblDate = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableItems = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         lblScreenHeading.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lblScreenHeading.setText("Store Front – Sales Personnel Login");
@@ -45,12 +58,9 @@ public class SalesScreen extends javax.swing.JFrame {
         lblDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblDate.setText("Today's Date: ");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "SR #", "Item Info", "Item Details", "Item Extras", "Actions"
@@ -64,13 +74,13 @@ public class SalesScreen extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
+        jScrollPane2.setViewportView(tableItems);
+        if (tableItems.getColumnModel().getColumnCount() > 0) {
+            tableItems.getColumnModel().getColumn(0).setResizable(false);
+            tableItems.getColumnModel().getColumn(1).setResizable(false);
+            tableItems.getColumnModel().getColumn(2).setResizable(false);
+            tableItems.getColumnModel().getColumn(3).setResizable(false);
+            tableItems.getColumnModel().getColumn(4).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -119,13 +129,45 @@ public class SalesScreen extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnAdminScreenActionPerformed
 
+    
+    /*
+        This function will be called when the form is opened
+        and visible on screen. Using this function to show
+        list of items in table from DB by calling the the 
+        ItemsController.
+    */
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
+        // Get all items from DB by calling the controller
+        List<ItemEntity> items = itemController.getAll();
+        
+        // create data model for the table
+        DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
+        
+        int i = 0;
+        for (ItemEntity item : items) {
+            JTextArea itemInfoArea = new JTextArea();
+            String itemInfo = "Title: " + item.getTitle() + "\n"
+                    + "Color: " + item.getColor();
+            
+            itemInfoArea.append(itemInfo);
+            
+            String itemDetails = "Barcode: " + item.getBarcode() + "\n"
+                    + "Quantity: " + item.getQuantity() + "\n" 
+                    + "Price: " + item.getPrice();
+            
+            Object [] row = {++i, itemInfoArea, itemDetails, item.getDescription()};
+            model.addRow(row);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminScreen;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblScreenHeading;
+    private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnAdminScreen() {
