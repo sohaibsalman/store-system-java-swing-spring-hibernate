@@ -1,11 +1,25 @@
 
 package com.storesystem.ui;
 
+import com.storesystem.ApplicationMessages;
+import com.storesystem.business.ItemController;
+import com.storesystem.business.SizeController;
+import com.storesystem.persistence.model.ItemEntity;
+import com.storesystem.persistence.model.SizeEntity;
+import java.util.List;
+import javax.swing.JOptionPane;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class ItemFormScreen extends javax.swing.JFrame {
+    
+    @Autowired
+    private SizeController sizeController;
+    
+    @Autowired
+    private ItemController itemController;
 
     /** Creates new form ItemFormScreen */
     public ItemFormScreen() {
@@ -39,6 +53,11 @@ public class ItemFormScreen extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setText("Items Form");
@@ -75,16 +94,9 @@ public class ItemFormScreen extends javax.swing.JFrame {
         txtDescription.setRows(5);
         jScrollPane1.setViewportView(txtDescription);
 
-        cboxSizes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("Sizes");
 
-        lstSizes.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane2.setViewportView(lstSizes);
 
         btnCancel.setText("Cancel");
@@ -95,6 +107,11 @@ public class ItemFormScreen extends javax.swing.JFrame {
         });
 
         btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -103,35 +120,38 @@ public class ItemFormScreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(107, 107, 107)
+                        .addGap(116, 116, 116)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtBarcode)
-                                .addComponent(txtQuantity)
-                                .addComponent(jLabel6)
-                                .addComponent(txtPrice)
-                                .addComponent(jLabel7)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
-                                .addComponent(txtTitle)
-                                .addComponent(jLabel4)
-                                .addComponent(txtColor)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel8)
-                                        .addComponent(cboxSizes, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jScrollPane2))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel7)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel4)
+                                        .addComponent(txtColor)
+                                        .addComponent(txtQuantity)
+                                        .addComponent(txtPrice)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel8)
+                                                .addComponent(cboxSizes, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                                        .addComponent(txtTitle)
+                                        .addComponent(txtBarcode))
+                                    .addGap(125, 125, 125)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(198, 198, 198)
                         .addComponent(jLabel1)))
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,6 +205,52 @@ public class ItemFormScreen extends javax.swing.JFrame {
         // Close the Item Form Screen without saving anything
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       // Get list of all sizes from DB
+        List<SizeEntity> sizes = sizeController.getAllSizes();
+        
+        // Init the dropdown for item sizes
+        for (SizeEntity size : sizes) {
+            cboxSizes.addItem(Integer.toString(size.getSizeNumber()));
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        
+        // Check if all required fields are entered or not
+        if(txtBarcode.getText().length() == 0 
+                || txtColor.getText().length() == 0
+                || txtPrice.getText().length() == 0
+                || txtQuantity.getText().length() == 0
+                || txtTitle.getText().length() == 0)
+        {
+            JOptionPane.showMessageDialog(this, "Please fill all the fields", "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else
+        {
+            ItemEntity item = new ItemEntity();
+            item.setBarcode(txtBarcode.getText());
+            item.setTitle(txtTitle.getText());
+            item.setColor(txtColor.getText());
+            item.setQuantity(Integer.parseInt(txtQuantity.getText()));
+            item.setPrice(Double.parseDouble(txtPrice.getText()));
+            item.setDescription(txtDescription.getText());
+            
+            ApplicationMessages result = itemController.addItem(item);
+            
+            if(result == ApplicationMessages.DATA_ADDED)
+            {
+                JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.OK_OPTION);
+            }
+            else 
+            {
+                JOptionPane.showMessageDialog(this, "Error adding the item!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
 
 

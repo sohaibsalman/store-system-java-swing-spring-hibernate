@@ -3,6 +3,7 @@ package com.storesystem.persistence.services;
 import com.storesystem.persistence.model.SizeEntity;
 import com.storesystem.persistence.repository.SizeRepository;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,11 @@ public class SizeServiceImpl implements SizeService{
                 sizeRepo.save(new SizeEntity(size));
             }
         }
+    }
+
+    @Override
+    public List<SizeEntity> getAllSizes() {
+        return sizeRepo.findAll();
     }
 
 }
