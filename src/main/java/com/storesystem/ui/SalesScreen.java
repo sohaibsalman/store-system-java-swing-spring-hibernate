@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,6 +25,8 @@ public class SalesScreen extends javax.swing.JFrame {
      */
     public SalesScreen() {
         initComponents();
+        
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -58,6 +59,7 @@ public class SalesScreen extends javax.swing.JFrame {
         lblDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblDate.setText("Today's Date: ");
 
+        tableItems.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tableItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -74,14 +76,8 @@ public class SalesScreen extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tableItems.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tableItems);
-        if (tableItems.getColumnModel().getColumnCount() > 0) {
-            tableItems.getColumnModel().getColumn(0).setResizable(false);
-            tableItems.getColumnModel().getColumn(1).setResizable(false);
-            tableItems.getColumnModel().getColumn(2).setResizable(false);
-            tableItems.getColumnModel().getColumn(3).setResizable(false);
-            tableItems.getColumnModel().getColumn(4).setResizable(false);
-        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -146,19 +142,32 @@ public class SalesScreen extends javax.swing.JFrame {
         
         int i = 0;
         for (ItemEntity item : items) {
-            JTextArea itemInfoArea = new JTextArea();
-            String itemInfo = "Title: " + item.getTitle() + "\n"
-                    + "Color: " + item.getColor();
             
-            itemInfoArea.append(itemInfo);
+            String itemInfo = "<html> Title: " + item.getTitle() + "<br />"
+                    + "Color: " + item.getColor() + "</html>";
             
-            String itemDetails = "Barcode: " + item.getBarcode() + "\n"
-                    + "Quantity: " + item.getQuantity() + "\n" 
-                    + "Price: " + item.getPrice();
+            String itemDetails = "<html> Barcode: " + item.getBarcode() + "<br />"
+                    + "Quantity: " + item.getQuantity() + "<br />" 
+                    + "Price: $" + item.getPrice() + "</html>";
             
-            Object [] row = {++i, itemInfoArea, itemDetails, item.getDescription()};
+            String itemDesc = "<html> Description: " + item.getDescription() + "<br />"
+                    + "<br /> <hr />";
+            
+            String reason = item.getUnavailableReason();
+            itemDesc += "Reason unavailable: ";
+            
+            if(reason == null || reason.length() == 0)
+                itemDesc += "N/A";
+            else
+                itemDesc += reason;
+            
+            itemDesc += "</html>";
+            
+            Object [] row = {++i, itemInfo, itemDetails, itemDesc};
             model.addRow(row);
         }
+        
+        tableItems.setRowHeight(100);
     }//GEN-LAST:event_formWindowOpened
 
 

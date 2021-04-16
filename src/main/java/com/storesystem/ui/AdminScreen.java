@@ -1,6 +1,10 @@
 package com.storesystem.ui;
 
+import com.storesystem.business.ItemController;
+import com.storesystem.persistence.model.ItemEntity;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +17,9 @@ public class AdminScreen extends javax.swing.JFrame {
     
     @Autowired
     private ItemFormScreen itemFormScreen;
+    
+    @Autowired
+    private ItemController itemController;
     
     /**
      * Creates new form AdminScreen
@@ -30,8 +37,14 @@ public class AdminScreen extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         btnStore = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
+        tableItems = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setText("Store Backend – Admin Personnel Login (admin) ");
@@ -52,6 +65,31 @@ public class AdminScreen extends javax.swing.JFrame {
                 btnStoreActionPerformed(evt);
             }
         });
+
+        tableItems.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "SR #", "Item Info", "Item Details", "Item Description"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableItems.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(tableItems);
+        if (tableItems.getColumnModel().getColumnCount() > 0) {
+            tableItems.getColumnModel().getColumn(0).setResizable(false);
+            tableItems.getColumnModel().getColumn(1).setResizable(false);
+            tableItems.getColumnModel().getColumn(2).setResizable(false);
+            tableItems.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,8 +131,7 @@ public class AdminScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStoreActionPerformed
-        
-        
+  
         // Set size of sales screen to full screen
         salesScreen.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
@@ -109,6 +146,43 @@ public class AdminScreen extends javax.swing.JFrame {
         itemFormScreen.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
+        // Get all items from DB by calling the controller
+        List<ItemEntity> items = itemController.getAll();
+        
+        // create data model for the table
+        DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
+        
+        int i = 0;
+        for (ItemEntity item : items) {
+            
+            String itemInfo = "<html> Title: " + item.getTitle() + "<br />"
+                    + "Color: " + item.getColor() + "</html>";
+            
+            String itemDetails = "<html> Barcode: " + item.getBarcode() + "<br />"
+                    + "Quantity: " + item.getQuantity() + "<br />" 
+                    + "Price: $" + item.getPrice() + "</html>";
+            
+            String itemDesc = "<html> Description: " + item.getDescription() + "<br />"
+                    + "<br /> <hr />";
+            
+            String reason = item.getUnavailableReason();
+            itemDesc += "Reason unavailable: ";
+            
+            if(reason == null || reason.length() == 0)
+                itemDesc += "N/A";
+            else
+                itemDesc += reason;
+            
+            itemDesc += "</html>";
+            
+            Object [] row = {++i, itemInfo, itemDetails, itemDesc};
+            model.addRow(row);
+        }
+        tableItems.setRowHeight(100);
+    }//GEN-LAST:event_formWindowOpened
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnStore;
@@ -116,5 +190,6 @@ public class AdminScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDate;
+    private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
 }
