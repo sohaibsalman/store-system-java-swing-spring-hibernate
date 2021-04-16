@@ -20,10 +20,15 @@ public class ItemFormScreen extends javax.swing.JFrame {
     
     @Autowired
     private ItemController itemController;
+    
+    @Autowired
+    private AdminScreen adminScreen;
 
     /** Creates new form ItemFormScreen */
     public ItemFormScreen() {
         initComponents();
+        
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -248,6 +253,7 @@ public class ItemFormScreen extends javax.swing.JFrame {
             {
                 // Data added message
                 JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.INFORMATION_MESSAGE);
+                adminScreen.InitTable();
             }
             else 
             {

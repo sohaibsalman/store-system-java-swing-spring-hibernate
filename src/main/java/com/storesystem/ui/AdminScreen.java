@@ -3,6 +3,8 @@ package com.storesystem.ui;
 import com.storesystem.ApplicationMessages;
 import com.storesystem.business.ItemController;
 import com.storesystem.persistence.model.ItemEntity;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -28,6 +30,13 @@ public class AdminScreen extends javax.swing.JFrame {
      */
     public AdminScreen() {
         initComponents();
+        
+        // Add event listener to JFrame to load the table from db
+        this.addComponentListener(new ComponentAdapter() {
+        public void componentShown(ComponentEvent e) {
+           InitTable();
+        }
+});
     }
 
     @SuppressWarnings("unchecked")
@@ -172,39 +181,6 @@ public class AdminScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
-        // Get all items from DB by calling the controller
-        List<ItemEntity> items = itemController.getAll();
-        
-        // create data model for the table
-        DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
-        
-        for (ItemEntity item : items) {
-            
-            String itemInfo = "<html> Title: " + item.getTitle() + "<br />"
-                    + "Color: " + item.getColor() + "</html>";
-            
-            String itemDetails = "<html> Barcode: " + item.getBarcode() + "<br />"
-                    + "Quantity: " + item.getQuantity() + "<br />" 
-                    + "Price: $" + item.getPrice() + "</html>";
-            
-            String itemDesc = "<html> Description: " + item.getDescription() + "<br />"
-                    + "<br /> <hr />";
-            
-            String reason = item.getUnavailableReason();
-            itemDesc += "Reason unavailable: ";
-            
-            if(reason == null || reason.length() == 0)
-                itemDesc += "N/A";
-            else
-                itemDesc += reason;
-            
-            itemDesc += "</html>";
-            
-            Object [] row = {item.getId(), itemInfo, itemDetails, itemDesc};
-            model.addRow(row);
-        }
-        tableItems.setRowHeight(100);
     }//GEN-LAST:event_formWindowOpened
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -245,6 +221,52 @@ public class AdminScreen extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    /*
+        This function will be called to initialize the admin screen
+        table with data. It will call the ItemsController to fetch
+        the data from the DB and then display it in the table
+    */
+    public void InitTable()
+    {
+        // Get all items from DB by calling the controller
+        List<ItemEntity> items = itemController.getAll();
+        
+        // create data model for the table
+        DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
+        
+        int rows = model.getRowCount();
+        // Clear the table
+        for (int i = rows - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+        
+        for (ItemEntity item : items) {
+            
+            String itemInfo = "<html> Title: " + item.getTitle() + "<br />"
+                    + "Color: " + item.getColor() + "</html>";
+            
+            String itemDetails = "<html> Barcode: " + item.getBarcode() + "<br />"
+                    + "Quantity: " + item.getQuantity() + "<br />" 
+                    + "Price: $" + item.getPrice() + "</html>";
+            
+            String itemDesc = "<html> Description: " + item.getDescription() + "<br />"
+                    + "<br /> <hr />";
+            
+            String reason = item.getUnavailableReason();
+            itemDesc += "Reason unavailable: ";
+            
+            if(reason == null || reason.length() == 0)
+                itemDesc += "N/A";
+            else
+                itemDesc += reason;
+            
+            itemDesc += "</html>";
+            
+            Object [] row = {item.getId(), itemInfo, itemDetails, itemDesc};
+            model.addRow(row);
+        }
+        tableItems.setRowHeight(100);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
