@@ -40,6 +40,19 @@ public class ItemServiceImpl implements ItemService{
     public ApplicationMessages update(ItemEntity item) {
         ItemEntity itemInDb = repo.findById(item.getId()).get();
         
+        itemInDb.setTitle(item.getTitle());
+        itemInDb.setPrice(item.getPrice());
+        itemInDb.setQuantity(item.getQuantity());
+        itemInDb.setDescription(item.getDescription());
+        itemInDb.setColor(item.getColor());
+        
+        
+        try {
+            repo.save(itemInDb);
+        } catch (Exception e) {
+            return ApplicationMessages.UPDATE_ERROR;
+        }
+        
         
         return ApplicationMessages.DATA_UPDATED;
     }

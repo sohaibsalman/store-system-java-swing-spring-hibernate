@@ -45,7 +45,7 @@ public class AdminScreen extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         btnStore = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableItems = new javax.swing.JTable();
@@ -65,10 +65,10 @@ public class AdminScreen extends javax.swing.JFrame {
         lblDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblDate.setText("Today's Date: April 15, 2021");
 
-        jButton1.setText("Add New");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setText("Add New");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
@@ -133,7 +133,7 @@ public class AdminScreen extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 381, Short.MAX_VALUE)
                         .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -153,7 +153,7 @@ public class AdminScreen extends javax.swing.JFrame {
                     .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -176,15 +176,53 @@ public class AdminScreen extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnStoreActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         itemFormScreen.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        itemFormScreen.isEditing = false;
+    }//GEN-LAST:event_btnAddActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
     }//GEN-LAST:event_formWindowOpened
 
+    /*
+        This function will be called when user clicks to edit the item button
+    */
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        // TODO add your handling code here:
+        
+        // Get the index of the selected row from table to delete
+        int selectedRow = tableItems.getSelectedRow();
+        
+        // Check if any row was selected
+        if(selectedRow >= 0)
+        {
+            // Get the id of the item from column ID of table
+            Long id = Long.parseLong(tableItems.getModel().getValueAt(selectedRow, 0).toString());
+            
+            // Get the item data from db
+            ItemEntity item = itemController.get(id);
+            
+            // Fill the form with the selected item values
+            itemFormScreen.getTxtBarcode().setText(item.getBarcode());
+            itemFormScreen.getTxtTitle().setText(item.getTitle());
+            itemFormScreen.getTxtColor().setText(item.getColor());
+            itemFormScreen.getTxtQuantity().setText(Integer.toString(item.getQuantity()));
+            itemFormScreen.getTxtPrice().setText(Double.toString(item.getPrice()));
+            itemFormScreen.getTxtDescription().setText(item.getDescription());
+            
+            // Set editing mode of items form to true, so that we can
+            // call the update method instead of creating a new item.
+            itemFormScreen.isEditing = true;
+            
+            itemFormScreen.lblId.setText(Long.toString(item.getId()));
+            
+            
+            itemFormScreen.setVisible(true);
+        }
+        else
+        {
+            // No row was selected from the table, show error message
+            JOptionPane.showMessageDialog(this, "Please select a row from table first.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -269,10 +307,10 @@ public class AdminScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnStore;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDate;

@@ -7,7 +7,10 @@ import com.storesystem.business.SizeController;
 import com.storesystem.persistence.model.ItemEntity;
 import com.storesystem.persistence.model.SizeEntity;
 import java.util.List;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +26,15 @@ public class ItemFormScreen extends javax.swing.JFrame {
     
     @Autowired
     private AdminScreen adminScreen;
+    
+    public boolean isEditing = false;
 
     /** Creates new form ItemFormScreen */
     public ItemFormScreen() {
         initComponents();
         
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        lblId.setVisible(false);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,6 +61,7 @@ public class ItemFormScreen extends javax.swing.JFrame {
         lstSizes = new javax.swing.JList<>();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        lblId = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -118,6 +125,8 @@ public class ItemFormScreen extends javax.swing.JFrame {
             }
         });
 
+        lblId.setText("id");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -137,7 +146,10 @@ public class ItemFormScreen extends javax.swing.JFrame {
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabel6)
                                         .addComponent(jLabel7)
-                                        .addComponent(jLabel2)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel2)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(lblId))
                                         .addComponent(jLabel3)
                                         .addComponent(jLabel4)
                                         .addComponent(txtColor)
@@ -164,7 +176,9 @@ public class ItemFormScreen extends javax.swing.JFrame {
                 .addGap(39, 39, 39)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(lblId))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -206,6 +220,8 @@ public class ItemFormScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // Clear the form fields
+        clearForm();
         
         // Close the Item Form Screen without saving anything
         this.dispose();
@@ -234,38 +250,73 @@ public class ItemFormScreen extends javax.swing.JFrame {
         }
         else
         {
-            // Create an item object to save it in db
-            ItemEntity item = new ItemEntity();
-            
-            // Init the item object with the values from UI
-            item.setBarcode(txtBarcode.getText());
-            item.setTitle(txtTitle.getText());
-            item.setColor(txtColor.getText());
-            item.setQuantity(Integer.parseInt(txtQuantity.getText()));
-            item.setPrice(Double.parseDouble(txtPrice.getText()));
-            item.setDescription(txtDescription.getText());
-            
-            // Send data to controller to save it in db
-            ApplicationMessages result = itemController.add(item);
-            
-            // Check if data was added or not
-            if(result == ApplicationMessages.DATA_ADDED)
+                // Create an item object to save it in db
+                ItemEntity item = new ItemEntity();
+
+                // Init the item object with the values from UI
+                item.setBarcode(txtBarcode.getText());
+                item.setTitle(txtTitle.getText());
+                item.setColor(txtColor.getText());
+                item.setQuantity(Integer.parseInt(txtQuantity.getText()));
+                item.setPrice(Double.parseDouble(txtPrice.getText()));
+                item.setDescription(txtDescription.getText());
+                
+            // Check if the form is open in editing mode, then we have to update the item
+            if(isEditing)
             {
-                // Data added message
-                JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.INFORMATION_MESSAGE);
-                adminScreen.InitTable();
+                // Get id of the item from hidden label
+                item.setId(Long.parseLong(lblId.getText()));
+                
+                ApplicationMessages result = itemController.update(item);
+                
+                if(result == ApplicationMessages.DATA_UPDATED)
+                {
+                    // Data updated message
+                    JOptionPane.showMessageDialog(this, "Item Updated", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    adminScreen.InitTable();
+                }
+                else
+                {
+                    // Error message
+                    JOptionPane.showMessageDialog(this, "Error updating the item!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
-            else 
+            else
             {
-                // Error message
-                JOptionPane.showMessageDialog(this, "Error adding the item!", "Error", JOptionPane.ERROR_MESSAGE);
+                // Send data to controller to save it in db
+                ApplicationMessages result = itemController.add(item);
+
+                // Check if data was added or not
+                if(result == ApplicationMessages.DATA_ADDED)
+                {
+                    // Data added message
+                    JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    adminScreen.InitTable();
+                }
+                else 
+                {
+                    // Error message
+                    JOptionPane.showMessageDialog(this, "Error adding the item!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
+            
+            //Clear the form fields
+            clearForm();
             
             // Close the Form
             this.dispose();
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    public void clearForm()
+    {
+        txtBarcode.setText("");
+        txtColor.setText("");
+        txtDescription.setText("");
+        txtPrice.setText("");
+        txtQuantity.setText("");
+        txtTitle.setText("");
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -282,6 +333,7 @@ public class ItemFormScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    public javax.swing.JLabel lblId;
     private javax.swing.JList<String> lstSizes;
     private javax.swing.JTextField txtBarcode;
     private javax.swing.JTextField txtColor;
@@ -291,4 +343,59 @@ public class ItemFormScreen extends javax.swing.JFrame {
     private javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
 
+    public JList<String> getLstSizes() {
+        return lstSizes;
+    }
+
+    public void setLstSizes(JList<String> lstSizes) {
+        this.lstSizes = lstSizes;
+    }
+
+    public JTextField getTxtBarcode() {
+        return txtBarcode;
+    }
+
+    public void setTxtBarcode(JTextField txtBarcode) {
+        this.txtBarcode = txtBarcode;
+    }
+
+    public JTextField getTxtColor() {
+        return txtColor;
+    }
+
+    public void setTxtColor(JTextField txtColor) {
+        this.txtColor = txtColor;
+    }
+
+    public JTextArea getTxtDescription() {
+        return txtDescription;
+    }
+
+    public void setTxtDescription(JTextArea txtDescription) {
+        this.txtDescription = txtDescription;
+    }
+
+    public JTextField getTxtPrice() {
+        return txtPrice;
+    }
+
+    public void setTxtPrice(JTextField txtPrice) {
+        this.txtPrice = txtPrice;
+    }
+
+    public JTextField getTxtQuantity() {
+        return txtQuantity;
+    }
+
+    public void setTxtQuantity(JTextField txtQuantity) {
+        this.txtQuantity = txtQuantity;
+    }
+
+    public JTextField getTxtTitle() {
+        return txtTitle;
+    }
+
+    public void setTxtTitle(JTextField txtTitle) {
+        this.txtTitle = txtTitle;
+    }
 }
