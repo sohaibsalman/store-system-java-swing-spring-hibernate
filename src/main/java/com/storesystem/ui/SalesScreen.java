@@ -1,5 +1,6 @@
 package com.storesystem.ui;
 
+import com.storesystem.ApplicationHelpers;
 import com.storesystem.business.ItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import java.awt.event.ComponentAdapter;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,12 @@ public class SalesScreen extends javax.swing.JFrame {
     private AdminScreen adminScreen;
     
     @Autowired
+    private OrderScreen orderScreen;
+    
+    @Autowired
     private ItemController itemController;
+    
+    private List<ItemEntity> items;
     
     /**
      * Creates new form SalesDashboard
@@ -90,6 +97,11 @@ public class SalesScreen extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tableItems);
 
         btnProceed.setText("Proceed to Order");
+        btnProceed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProceedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -108,6 +120,11 @@ public class SalesScreen extends javax.swing.JFrame {
         );
 
         btnAddOrder.setText("Add Order");
+        btnAddOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddOrderActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -171,10 +188,50 @@ public class SalesScreen extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
     }//GEN-LAST:event_formWindowOpened
 
+    private void btnAddOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderActionPerformed
+        
+        // Get selected row from table
+        int selectedRow = tableItems.getSelectedRow();
+        
+        // check if the user has selected any item from table
+        if(selectedRow >= 0)
+        {
+            ItemEntity selectedItem = items.get(selectedRow);
+            
+            // Check the quantity of the selected item
+            if(selectedItem.getQuantity() == 0)
+            {
+                // Show out of stock error message
+                JOptionPane.showMessageDialog(this, "Selected Item is out of stock...", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                // Add the selected item to the static orders list
+                ApplicationHelpers.orderedItems.add(selectedItem);
+                
+                // Show success message
+                JOptionPane.showMessageDialog(this, "Item added to order list", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        else
+        {
+            // Show error message to select an item
+            JOptionPane.showMessageDialog(this, "Please select an item from table", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAddOrderActionPerformed
+
+    private void btnProceedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProceedActionPerformed
+        // close the sales screen
+        this.dispose();
+        
+        // open orders screen
+        orderScreen.setVisible(true);
+    }//GEN-LAST:event_btnProceedActionPerformed
+
     private void initTable()
     {
         // Get all items from DB by calling the controller
-        List<ItemEntity> items = itemController.getAll();
+        items = itemController.getAll();
         
         // create data model for the table
         DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
