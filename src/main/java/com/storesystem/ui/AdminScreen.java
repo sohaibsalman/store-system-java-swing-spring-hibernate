@@ -1,5 +1,6 @@
 package com.storesystem.ui;
 
+import com.storesystem.ApplicationHelpers;
 import com.storesystem.ApplicationMessages;
 import com.storesystem.business.ItemController;
 import com.storesystem.persistence.model.ItemEntity;
@@ -37,13 +38,16 @@ public class AdminScreen extends javax.swing.JFrame {
                InitTable();
             }
         });
+        
+        // Show logged in username
+        lblFormHeading.setText(ApplicationHelpers.username);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lblFormHeading = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
         btnStore = new javax.swing.JButton();
@@ -59,8 +63,8 @@ public class AdminScreen extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel1.setText("Store Backend – Admin Personnel Login (admin) ");
+        lblFormHeading.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lblFormHeading.setText("Store Backend – Admin Personnel Login ");
 
         lblDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblDate.setText("Today's Date: April 15, 2021");
@@ -128,9 +132,9 @@ public class AdminScreen extends javax.swing.JFrame {
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
+                            .addComponent(lblFormHeading)
                             .addComponent(lblDate))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 381, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 450, Short.MAX_VALUE)
                         .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -147,7 +151,7 @@ public class AdminScreen extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(lblFormHeading)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblDate))
                     .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -311,9 +315,9 @@ public class AdminScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnStore;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblFormHeading;
     private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
 }
