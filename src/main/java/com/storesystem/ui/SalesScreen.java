@@ -2,6 +2,8 @@ package com.storesystem.ui;
 
 import com.storesystem.business.ItemController;
 import com.storesystem.persistence.model.ItemEntity;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +28,12 @@ public class SalesScreen extends javax.swing.JFrame {
     public SalesScreen() {
         initComponents();
         
-        
+        // Add event listener to JFrame to load the table from db
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentShown(ComponentEvent e) {
+               initTable();
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -133,12 +140,21 @@ public class SalesScreen extends javax.swing.JFrame {
         ItemsController.
     */
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
+    }//GEN-LAST:event_formWindowOpened
+
+    private void initTable()
+    {
         // Get all items from DB by calling the controller
         List<ItemEntity> items = itemController.getAll();
         
         // create data model for the table
         DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
+        
+        int rows = model.getRowCount();
+        // Clear the table
+        for (int i = rows - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
         
         int i = 0;
         for (ItemEntity item : items) {
@@ -168,8 +184,7 @@ public class SalesScreen extends javax.swing.JFrame {
         }
         
         tableItems.setRowHeight(100);
-    }//GEN-LAST:event_formWindowOpened
-
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminScreen;

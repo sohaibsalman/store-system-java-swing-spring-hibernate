@@ -33,10 +33,10 @@ public class AdminScreen extends javax.swing.JFrame {
         
         // Add event listener to JFrame to load the table from db
         this.addComponentListener(new ComponentAdapter() {
-        public void componentShown(ComponentEvent e) {
-           InitTable();
-        }
-});
+            public void componentShown(ComponentEvent e) {
+               InitTable();
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
