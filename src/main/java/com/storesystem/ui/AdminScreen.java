@@ -1,9 +1,11 @@
 package com.storesystem.ui;
 
+import com.storesystem.ApplicationMessages;
 import com.storesystem.business.ItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,8 @@ public class AdminScreen extends javax.swing.JFrame {
         btnStore = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableItems = new javax.swing.JTable();
+        btnEdit = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -71,7 +75,7 @@ public class AdminScreen extends javax.swing.JFrame {
 
             },
             new String [] {
-                "SR #", "Item Info", "Item Details", "Item Description"
+                "ID", "Item Info", "Item Details", "Item Description"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -91,6 +95,20 @@ public class AdminScreen extends javax.swing.JFrame {
             tableItems.getColumnModel().getColumn(3).setResizable(false);
         }
 
+        btnEdit.setText("Edit");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -107,6 +125,10 @@ public class AdminScreen extends javax.swing.JFrame {
                         .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -121,7 +143,10 @@ public class AdminScreen extends javax.swing.JFrame {
                         .addComponent(lblDate))
                     .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                 .addContainerGap())
@@ -154,7 +179,6 @@ public class AdminScreen extends javax.swing.JFrame {
         // create data model for the table
         DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
         
-        int i = 0;
         for (ItemEntity item : items) {
             
             String itemInfo = "<html> Title: " + item.getTitle() + "<br />"
@@ -177,14 +201,54 @@ public class AdminScreen extends javax.swing.JFrame {
             
             itemDesc += "</html>";
             
-            Object [] row = {++i, itemInfo, itemDetails, itemDesc};
+            Object [] row = {item.getId(), itemInfo, itemDetails, itemDesc};
             model.addRow(row);
         }
         tableItems.setRowHeight(100);
     }//GEN-LAST:event_formWindowOpened
 
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        
+        // Get the index of the selected row from table to delete
+        int selectedRow = tableItems.getSelectedRow();
+        
+        // Check if any row was selected
+        if(selectedRow >= 0)
+        {
+            // Get the id of the item from column ID of table
+            Long id = Long.parseLong(tableItems.getModel().getValueAt(selectedRow, 0).toString());
+            
+            // Call the controller to delete the item from DB
+            ApplicationMessages result = itemController.delete(id);
+            
+            if(result == ApplicationMessages.DATA_DELETED)
+            {
+                // Show success message
+                JOptionPane.showMessageDialog(this, "Item Deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                
+                // Remove the row from the table
+                ((DefaultTableModel)tableItems.getModel()).removeRow(selectedRow);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Error deleting the item", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else
+        {
+            // No row was selected from the table, show error message
+            JOptionPane.showMessageDialog(this, "Please select a row from table first.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnStore;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

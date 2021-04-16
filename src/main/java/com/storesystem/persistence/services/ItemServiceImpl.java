@@ -46,7 +46,16 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public ApplicationMessages delete(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ItemEntity itemInDb = repo.findById(id).get();
+        
+        
+        try {
+            repo.delete(itemInDb);
+
+        } catch (Exception e) {
+            return ApplicationMessages.DELETE_ERROR;
+        }
+        return ApplicationMessages.DATA_DELETED;
     }
 
 }

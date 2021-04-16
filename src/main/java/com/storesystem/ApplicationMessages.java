@@ -9,4 +9,6 @@ public enum ApplicationMessages {
     SAVE_ERROR,
     DATA_UPDATED,
     DATA_DELETED,
+    DELETE_ERROR,
+    UPDATE_ERROR
 }
