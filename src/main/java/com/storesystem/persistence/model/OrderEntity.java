@@ -1,11 +1,12 @@
 package com.storesystem.persistence.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,23 +14,26 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
 @Table(name = "orders")
-public class OrdersEntity {
+public class OrderEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(name = "order_date")
-    private Date orderDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date orderDate = new Date();
     
     @Column(name = "grand_total")
     private double grandTotal;
     
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
        name = "order_items",
        joinColumns = {

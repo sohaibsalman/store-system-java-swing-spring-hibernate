@@ -1,7 +1,12 @@
 package com.storesystem.ui;
 
 import com.storesystem.ApplicationHelpers;
+import com.storesystem.ApplicationMessages;
+import com.storesystem.business.ItemController;
+import com.storesystem.business.OrderController;
 import com.storesystem.persistence.model.ItemEntity;
+import com.storesystem.persistence.model.OrderEntity;
+import com.storesystem.persistence.repository.OrderRepository;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,13 +17,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderScreen extends javax.swing.JFrame {
     
+    /* Inject the sales screen in the order screen by using spring boot dependency injection */
     @Autowired
     private SalesScreen salesScreen;
-
-    /** Creates new form OrderScreen */
+    
+    /* Inject the order controller in the order screen by using spring boot dependency injection */
+    @Autowired
+    private OrderController orderController;
+    
+    /* Inject the item controller in the order screen by using spring boot dependency injection */
+    @Autowired
+    private ItemController itemController;
+    
+    @Autowired 
+    private OrderRepository repo;
+    
+    private double grandTotal;
+    
+    /* Creates new form OrderScreen */
     public OrderScreen() {
         initComponents();
         
+        /* Make JFrame full screen */
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
@@ -87,6 +107,11 @@ public class OrderScreen extends javax.swing.JFrame {
         });
 
         btnComplete.setText("Complete Purchase");
+        btnComplete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -134,9 +159,9 @@ public class OrderScreen extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -152,14 +177,26 @@ public class OrderScreen extends javax.swing.JFrame {
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         
-        // Remove all the ordered items from session
-        ApplicationHelpers.orderedItems.clear();
+        // Get selected row from table
+        int selectedRow = tableOrderItems.getSelectedRow();
         
-        // Refresh the table
-        initTable();
-        
-        // Show message
-        JOptionPane.showMessageDialog(this, "Orders removed from session", "Success", JOptionPane.INFORMATION_MESSAGE);
+        // check if the user has selected any row from table
+        if(selectedRow >= 0)
+        {
+            // Remove the order from the orders list
+            ApplicationHelpers.orderedItems.remove(selectedRow);
+            
+            // Refresh the table
+            initTable();
+            
+            // Show message
+            JOptionPane.showMessageDialog(this, "Order removed from the list", "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+            // Display error to select a row from table
+            JOptionPane.showMessageDialog(this, "Please select an order to remove", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -169,6 +206,33 @@ public class OrderScreen extends javax.swing.JFrame {
         // open the sales screen
         salesScreen.setVisible(true);
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    /*
+        This function will be called when a user presses the complete
+        purchase button on orders screen. This function will then call
+        the business layer controller to add the order in DB along with
+        its items
+    */
+    private void btnCompleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompleteActionPerformed
+        
+        /* Get ordered items from the session */
+        List<ItemEntity> orderedItems = ApplicationHelpers.orderedItems;
+        
+        /* Send data to business layer controller */
+        ApplicationMessages result = orderController.add(orderedItems, grandTotal);
+        
+        // Check if order was added successfully
+        if(result == ApplicationMessages.DATA_ADDED)
+        {
+            // Show success message
+            JOptionPane.showMessageDialog(this, "Purchase Completed", "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+            // Show error message
+            JOptionPane.showMessageDialog(this, "Error completing the purchase", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCompleteActionPerformed
 
     private void initTable()
     {
@@ -201,6 +265,10 @@ public class OrderScreen extends javax.swing.JFrame {
             Object [] row = {++count, orderInfo, ammountInfo};
             model.addRow(row);
         }
+        
+        // Set grand total
+        this.grandTotal = grandTotal;
+        
         Object [] row = {"", "", "Grand Total: $" + String.format("%.2f", grandTotal) };
         model.addRow(row);
         tableOrderItems.setRowHeight(80);

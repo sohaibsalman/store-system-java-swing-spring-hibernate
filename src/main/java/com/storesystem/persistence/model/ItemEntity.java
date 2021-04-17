@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +18,21 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "items")
 public class ItemEntity  {
+
+    public ItemEntity() {
+    }
+    
+    public ItemEntity(ItemEntity ref) {
+        this.availableDate = ref.getAvailableDate();
+        this.barcode = ref.getBarcode();
+        this.color = ref.getColor();
+        this.description = ref.getDescription();
+//        this.orders = ref.getOrders();
+        this.price = ref.getPrice();
+        this.quantity = ref.getQuantity();
+        this.title = ref.getTitle();
+        this.unavailableReason = ref.getUnavailableReason();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,19 +62,19 @@ public class ItemEntity  {
     @Column (name = "available_date")
     private Date availableDate;
 
-    @ManyToMany(cascade = {
-        CascadeType.ALL
-    })
-    @JoinTable(
-            name = "item_sizes", 
-            joinColumns = {@JoinColumn(name = "item_id")},
-            inverseJoinColumns = {@JoinColumn(name = "size_id")})
-    private Set<SizeEntity> sizes = new HashSet<>();
+//    @ManyToMany(cascade = {
+//        CascadeType.ALL
+//    }, fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "item_sizes", 
+//            joinColumns = {@JoinColumn(name = "item_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "size_id")})
+//    private Set<SizeEntity> sizes = new HashSet<>();
     
     
-    // Many to many relation for order and items
-    @ManyToMany(mappedBy = "items", cascade = { CascadeType.ALL })
-    private Set<OrdersEntity> orders = new HashSet<OrdersEntity>();
+//    // Many to many relation for order and items
+//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "items", cascade = { CascadeType.ALL })
+//    private Set<OrderEntity> orders = new HashSet<OrderEntity>();
     
     public Long getId() {
         return id;
@@ -132,19 +148,19 @@ public class ItemEntity  {
         this.availableDate = availableDate;
     }
 
-    public Set<SizeEntity> getSizes() {
-        return sizes;
-    }
+//    public Set<SizeEntity> getSizes() {
+//        return sizes;
+//    }
+//
+//    public void setSizes(Set<SizeEntity> sizes) {
+//        this.sizes = sizes;
+//    }
 
-    public void setSizes(Set<SizeEntity> sizes) {
-        this.sizes = sizes;
-    }
-
-    public Set<OrdersEntity> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<OrdersEntity> orders) {
-        this.orders = orders;
-    }
+//    public Set<OrderEntity> getOrders() {
+//        return orders;
+//    }
+//
+//    public void setOrders(Set<OrderEntity> orders) {
+//        this.orders = orders;
+//    }
 }
