@@ -8,7 +8,6 @@ import com.storesystem.business.OrderItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import com.storesystem.persistence.model.OrderEntity;
 import com.storesystem.persistence.model.OrderItemEntity;
-import com.storesystem.persistence.repository.OrderRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -218,9 +217,6 @@ public class OrderScreen extends javax.swing.JFrame {
     */
     private void btnCompleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompleteActionPerformed
         
-//        /* Get ordered items from the session */
-//        List<ItemEntity> orderedItems = ApplicationHelpers.orderedItems;
-
         OrderEntity order = new OrderEntity();
         order.setGrandTotal(grandTotal);
         

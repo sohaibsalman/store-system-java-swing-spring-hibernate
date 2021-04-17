@@ -1,15 +1,10 @@
 package com.storesystem.persistence.model;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -30,9 +25,6 @@ public class SizeEntity {
     @Column(name = "size_number")
     private int sizeNumber;
     
-//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "sizes", cascade = {CascadeType.ALL})
-//    private Set<ItemEntity> items = new HashSet<ItemEntity>();
-
     public Long getId() {
         return id;
     }
@@ -48,12 +40,4 @@ public class SizeEntity {
     public void setSizeNumber(int sizeNumber) {
         this.sizeNumber = sizeNumber;
     }
-
-//    public Set<ItemEntity> getItems() {
-//        return items;
-//    }
-//
-//    public void setItems(Set<ItemEntity> items) {
-//        this.items = items;
-//    }
 }

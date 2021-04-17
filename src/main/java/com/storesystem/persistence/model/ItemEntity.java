@@ -1,39 +1,17 @@
 package com.storesystem.persistence.model;
 
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "items")
 public class ItemEntity  {
-
-    public ItemEntity() {
-    }
-    
-    public ItemEntity(ItemEntity ref) {
-        this.availableDate = ref.getAvailableDate();
-        this.barcode = ref.getBarcode();
-        this.color = ref.getColor();
-        this.description = ref.getDescription();
-//        this.orders = ref.getOrders();
-        this.price = ref.getPrice();
-        this.quantity = ref.getQuantity();
-        this.title = ref.getTitle();
-        this.unavailableReason = ref.getUnavailableReason();
-    }
-
+   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -61,20 +39,6 @@ public class ItemEntity  {
     
     @Column (name = "available_date")
     private Date availableDate;
-
-//    @ManyToMany(cascade = {
-//        CascadeType.ALL
-//    }, fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "item_sizes", 
-//            joinColumns = {@JoinColumn(name = "item_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "size_id")})
-//    private Set<SizeEntity> sizes = new HashSet<>();
-    
-    
-//    // Many to many relation for order and items
-//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "items", cascade = { CascadeType.ALL })
-//    private Set<OrderEntity> orders = new HashSet<OrderEntity>();
     
     public Long getId() {
         return id;
@@ -148,19 +112,4 @@ public class ItemEntity  {
         this.availableDate = availableDate;
     }
 
-//    public Set<SizeEntity> getSizes() {
-//        return sizes;
-//    }
-//
-//    public void setSizes(Set<SizeEntity> sizes) {
-//        this.sizes = sizes;
-//    }
-
-//    public Set<OrderEntity> getOrders() {
-//        return orders;
-//    }
-//
-//    public void setOrders(Set<OrderEntity> orders) {
-//        this.orders = orders;
-//    }
 }
