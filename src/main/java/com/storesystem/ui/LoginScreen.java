@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class LoginScreen extends javax.swing.JFrame {
 
     @Autowired
-    private SalesScreen sales;
+    private SalesScreen salesScreen;
     
     @Autowired
     private LoginController loginController;
@@ -164,17 +164,15 @@ public class LoginScreen extends javax.swing.JFrame {
                 in user is not admin.
             */
             if(!ApplicationHelpers.isAdmin)
-                sales.getBtnAdminScreen().setVisible(false);
+                salesScreen.getBtnAdminScreen().setVisible(false);
             
             /*
                 Set username of logged in person to display it
                 on SalesScreen
             */
-            sales.getLblScreenHeading().setText(sales.getLblScreenHeading().getText() + "(" + ApplicationHelpers.username + ")");
+            salesScreen.getLblScreenHeading().setText(salesScreen.getLblScreenHeading().getText() + "(" + ApplicationHelpers.username + ")");
             
-            
-            sales.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            sales.setVisible(true);
+            salesScreen.setVisible(true);
             this.dispose();
         }
         else if (result == ApplicationMessages.INVALID_PASSWORD)

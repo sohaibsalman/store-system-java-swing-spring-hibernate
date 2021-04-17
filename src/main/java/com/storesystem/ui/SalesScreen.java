@@ -5,6 +5,7 @@ import com.storesystem.business.ItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,9 +36,28 @@ public class SalesScreen extends javax.swing.JFrame {
     public SalesScreen() {
         initComponents();
         
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        // Set Current Date
+        Date date = new Date();
+        String month = ApplicationHelpers.months[date.getMonth()];
+        int monthDate = date.getDate();
+        int year = date.getYear() + 1900;
+        
+        // Set label text
+        lblDate.setText(lblDate.getText() + " " + month + " " + monthDate + ", " + year);
+        
         // Add event listener to JFrame to load the table from db
         this.addComponentListener(new ComponentAdapter() {
             public void componentShown(ComponentEvent e) {
+               // Set name of the logged in user
+               lblUser.setText(lblUser.getText() + " " + ApplicationHelpers.username);
+               
+               // Set account type label
+               String accountType = ApplicationHelpers.isAdmin ? "Admin" : "Sales Person";
+               lblAccountType.setText(lblAccountType.getText() + " " + accountType); 
+               
+               // call function to add data in table
                initTable();
             }
         });
@@ -47,14 +67,18 @@ public class SalesScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblScreenHeading = new javax.swing.JLabel();
-        btnAdminScreen = new javax.swing.JButton();
-        lblDate = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableItems = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         btnProceed = new javax.swing.JButton();
         btnAddOrder = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        btnAdminScreen = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        lblScreenHeading = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
+        lblDate = new javax.swing.JLabel();
+        lblAccountType = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -62,19 +86,6 @@ public class SalesScreen extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
-
-        lblScreenHeading.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        lblScreenHeading.setText("Store Front – Sales Personnel Login");
-
-        btnAdminScreen.setText("Admin");
-        btnAdminScreen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdminScreenActionPerformed(evt);
-            }
-        });
-
-        lblDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblDate.setText("Today's Date: ");
 
         tableItems.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tableItems.setModel(new javax.swing.table.DefaultTableModel(
@@ -96,6 +107,9 @@ public class SalesScreen extends javax.swing.JFrame {
         tableItems.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tableItems);
 
+        btnProceed.setBackground(new java.awt.Color(0, 153, 51));
+        btnProceed.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnProceed.setForeground(new java.awt.Color(255, 255, 255));
         btnProceed.setText("Proceed to Order");
         btnProceed.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,7 +123,7 @@ public class SalesScreen extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnProceed))
+                .addComponent(btnProceed, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,12 +133,83 @@ public class SalesScreen extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnAddOrder.setText("Add Order");
+        btnAddOrder.setBackground(new java.awt.Color(102, 102, 255));
+        btnAddOrder.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAddOrder.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddOrder.setText("Add Item to Cart");
         btnAddOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddOrderActionPerformed(evt);
             }
         });
+
+        jPanel2.setBackground(new java.awt.Color(0, 102, 153));
+
+        btnAdminScreen.setBackground(new java.awt.Color(204, 109, 0));
+        btnAdminScreen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAdminScreen.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdminScreen.setText("Admin Screen");
+        btnAdminScreen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminScreenActionPerformed(evt);
+            }
+        });
+
+        jPanel3.setBackground(new java.awt.Color(0, 102, 153));
+
+        lblScreenHeading.setFont(new java.awt.Font("Brush Script MT", 1, 36)); // NOI18N
+        lblScreenHeading.setForeground(new java.awt.Color(255, 255, 255));
+        lblScreenHeading.setText("Store Front – Sales Personnel Login");
+        jPanel3.add(lblScreenHeading);
+
+        lblUser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblUser.setForeground(new java.awt.Color(255, 255, 255));
+        lblUser.setText("Logged in as: ");
+
+        lblDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblDate.setForeground(new java.awt.Color(255, 255, 255));
+        lblDate.setText("Today's Date: ");
+
+        lblAccountType.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccountType.setForeground(new java.awt.Color(255, 255, 255));
+        lblAccountType.setText("Account Type:");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 992, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDate)
+                            .addComponent(lblAccountType))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAdminScreen))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblUser)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblUser)
+                .addGap(3, 3, 3)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAdminScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(lblAccountType)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDate)))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,32 +218,22 @@ public class SalesScreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 959, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblScreenHeading)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAdminScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDate)
-                            .addComponent(btnAddOrder))
+                        .addComponent(btnAddOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblScreenHeading)
-                    .addComponent(btnAdminScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAddOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblDate)
-                .addGap(18, 18, 18)
-                .addComponent(btnAddOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -276,9 +351,13 @@ public class SalesScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnAdminScreen;
     private javax.swing.JButton btnProceed;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblAccountType;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblScreenHeading;
+    private javax.swing.JLabel lblUser;
     private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
 
