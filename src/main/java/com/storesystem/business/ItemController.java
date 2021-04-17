@@ -18,7 +18,7 @@ public class ItemController {
         items, it will call the required service to 
         save the item data in DB
     */
-    public ApplicationMessages add(ItemEntity item)
+    public ItemEntity add(ItemEntity item)
     {
         return service.add(item);
     }

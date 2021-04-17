@@ -3,7 +3,6 @@ package com.storesystem.ui;
 import com.storesystem.ApplicationHelpers;
 import com.storesystem.ApplicationMessages;
 import com.storesystem.business.LoginController;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ItemService {
 
-    public ApplicationMessages add(ItemEntity item);
+    public ItemEntity add(ItemEntity item);
     
     public List<ItemEntity> getAll();
 

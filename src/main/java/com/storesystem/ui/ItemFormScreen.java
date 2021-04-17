@@ -3,10 +3,13 @@ package com.storesystem.ui;
 
 import com.storesystem.ApplicationMessages;
 import com.storesystem.business.ItemController;
+import com.storesystem.business.ItemSizeController;
 import com.storesystem.business.SizeController;
 import com.storesystem.persistence.model.ItemEntity;
+import com.storesystem.persistence.model.ItemSizeEntity;
 import com.storesystem.persistence.model.SizeEntity;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -30,9 +33,14 @@ public class ItemFormScreen extends javax.swing.JFrame {
     @Autowired
     private AdminScreen adminScreen;
     
+    @Autowired
+    private ItemSizeController itemSizeController;
+    
     public boolean isEditing = false;
     
     private List<SizeEntity> sizes;
+    
+    private List<SizeEntity> sizeAdded = new ArrayList<>();
     
     /** Creates new form ItemFormScreen */
     public ItemFormScreen() {
@@ -75,6 +83,11 @@ public class ItemFormScreen extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -121,7 +134,7 @@ public class ItemFormScreen extends javax.swing.JFrame {
         });
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel8.setText("Sizes");
+        jLabel8.setText("Size");
         jLabel8.setEnabled(false);
 
         lstSizes.setEnabled(false);
@@ -198,45 +211,45 @@ public class ItemFormScreen extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(217, 217, 217)
-                                .addComponent(lblId)
-                                .addGap(32, 32, 32)
-                                .addComponent(jLabel3))
                             .addComponent(jLabel6)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(73, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cboxSizes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(chckSize)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane2)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(217, 217, 217)
+                                        .addComponent(lblId)))
                                 .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5)
+                                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(55, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel7))
-                            .addComponent(jLabel9))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel9)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(chckSize)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(cboxSizes, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2)))
+                        .addGap(0, 47, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,28 +276,24 @@ public class ItemFormScreen extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(16, 16, 16)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(144, 144, 144)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(chckSize)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(cboxSizes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chckSize)
+                    .addComponent(jLabel8)
+                    .addComponent(cboxSizes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -299,13 +308,7 @@ public class ItemFormScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       // Get list of all sizes from DB
-        sizes = sizeController.getAllSizes();
-        
-        // Init the dropdown for item sizes
-        for (SizeEntity size : sizes) {
-            cboxSizes.addItem(Integer.toString(size.getSizeNumber()));
-        }
+       
     }//GEN-LAST:event_formWindowOpened
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -321,16 +324,16 @@ public class ItemFormScreen extends javax.swing.JFrame {
         }
         else
         {
-                // Create an item object to save it in db
-                ItemEntity item = new ItemEntity();
+            // Create an item object to save it in db
+            ItemEntity item = new ItemEntity();
 
-                // Init the item object with the values from UI
-                item.setBarcode(txtBarcode.getText());
-                item.setTitle(txtTitle.getText());
-                item.setColor(txtColor.getText());
-                item.setQuantity(Integer.parseInt(txtQuantity.getText()));
-                item.setPrice(Double.parseDouble(txtPrice.getText()));
-                item.setDescription(txtDescription.getText());
+            // Init the item object with the values from UI
+            item.setBarcode(txtBarcode.getText());
+            item.setTitle(txtTitle.getText());
+            item.setColor(txtColor.getText());
+            item.setQuantity(Integer.parseInt(txtQuantity.getText()));
+            item.setPrice(Double.parseDouble(txtPrice.getText()));
+            item.setDescription(txtDescription.getText());
                 
             // Check if the form is open in editing mode, then we have to update the item
             if(isEditing)
@@ -355,14 +358,36 @@ public class ItemFormScreen extends javax.swing.JFrame {
             else
             {
                 // Send data to controller to save it in db
-                ApplicationMessages result = itemController.add(item);
+                ItemEntity addedItem = itemController.add(item);
 
                 // Check if data was added or not
-                if(result == ApplicationMessages.DATA_ADDED)
+                if(addedItem != null)
                 {
-                    // Data added message
-                    JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    adminScreen.InitTable();
+//                   
+                    
+                    List<ItemSizeEntity> list = new ArrayList<>();
+                    
+                    // Iterate the size added array and make a list to save it in db
+                    for (SizeEntity size : sizeAdded) {
+                        // Create an object
+                        ItemSizeEntity temp = new ItemSizeEntity();
+                        
+                        // initialize the object
+                        temp.setItemId(addedItem.getId());
+                        temp.setSizeId(size.getId());
+                        
+                        // add it to list
+                        list.add(temp);
+                    }
+                    
+                    ApplicationMessages result = itemSizeController.add(list);
+                    
+                    if(result == ApplicationMessages.DATA_ADDED)
+                    {
+                        // Data added message
+                        JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        adminScreen.InitTable();
+                    }
                 }
                 else 
                 {
@@ -398,25 +423,50 @@ public class ItemFormScreen extends javax.swing.JFrame {
 
     private void cboxSizesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxSizesActionPerformed
         
-        // Get the selected value
-        String item = cboxSizes.getSelectedItem().toString();
+        if(chckSize.isSelected())
+        {
+            // Get the selected value
+            String item = cboxSizes.getSelectedItem().toString();
+            
+            // Add the selected item to sizeAdded list, which will be used to add sizes in DB
+            int index = cboxSizes.getSelectedIndex();
+            sizeAdded.add(sizes.get(index));
+
+            // Create data model for list
+            DefaultListModel model = new DefaultListModel();
+
+            ListModel lstmodel = lstSizes.getModel();
+
+            // Add already added itms to models
+            for (int i = 0; i < lstmodel.getSize(); i++) {
+                model.addElement(lstmodel.getElementAt(i));
+            }
+
+            // add item to model
+            model.addElement(item);
+
+            // set model of the list
+            lstSizes.setModel(model);
+        }
+    }//GEN-LAST:event_cboxSizesActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // Get list of all sizes from DB
+        sizes = sizeController.getAllSizes();
         
-        // Create data model for list
-        DefaultListModel model = new DefaultListModel();
-        
-        ListModel lstmodel = lstSizes.getModel();
-        
-        // Add already added itms to models
-        for (int i = 0; i < lstmodel.getSize(); i++) {
-            model.addElement(lstmodel.getElementAt(i));
+        // Init the dropdown for item sizes
+        for (SizeEntity size : sizes) {
+            cboxSizes.addItem(Integer.toString(size.getSizeNumber()));
         }
         
-        // add item to model
-        model.addElement(item);
-        
-        // set model of the list
-        lstSizes.setModel(model);
-    }//GEN-LAST:event_cboxSizesActionPerformed
+        if(!isEditing)
+        {
+            chckSize.setSelected(false);
+            // Clear jlist for sizes
+            
+            lstSizes.setModel(new DefaultListModel<>());
+        }
+    }//GEN-LAST:event_formComponentShown
 
     public void clearForm()
     {

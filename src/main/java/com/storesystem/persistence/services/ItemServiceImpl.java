@@ -16,14 +16,14 @@ public class ItemServiceImpl implements ItemService{
     private ItemRepository repo;
 
     @Override
-    public ApplicationMessages add(ItemEntity item) {
-        
+    public ItemEntity add(ItemEntity item) {
+        ItemEntity model;
         try {
-            repo.save(item);
+            model = repo.save(item);
         } catch (Exception e) {
-            return ApplicationMessages.SAVE_ERROR;
+            return null;
         }
-        return ApplicationMessages.DATA_ADDED;
+        return model; 
     }
 
     @Override

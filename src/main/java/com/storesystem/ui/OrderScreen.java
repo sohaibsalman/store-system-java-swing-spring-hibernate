@@ -8,8 +8,6 @@ import com.storesystem.business.OrderItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import com.storesystem.persistence.model.OrderEntity;
 import com.storesystem.persistence.model.OrderItemEntity;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +35,9 @@ public class OrderScreen extends javax.swing.JFrame {
     
     @Autowired
     private OrderItemController orderItemController;
+    
+    @Autowired
+    private OrderScreen orderScreen;
     
     private double grandTotal;
     
@@ -282,6 +283,11 @@ public class OrderScreen extends javax.swing.JFrame {
         if(result == ApplicationMessages.DATA_ADDED)
         {
             JOptionPane.showMessageDialog(this, "Order Completed", "Success", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Close the orders screen
+            this.dispose();
+            
+            orderScreen.setVisible(true);
         }
         else
         {
