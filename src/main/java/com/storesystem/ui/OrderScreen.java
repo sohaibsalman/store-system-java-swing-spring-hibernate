@@ -4,9 +4,12 @@ import com.storesystem.ApplicationHelpers;
 import com.storesystem.ApplicationMessages;
 import com.storesystem.business.ItemController;
 import com.storesystem.business.OrderController;
+import com.storesystem.business.OrderItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import com.storesystem.persistence.model.OrderEntity;
+import com.storesystem.persistence.model.OrderItemEntity;
 import com.storesystem.persistence.repository.OrderRepository;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -29,8 +32,8 @@ public class OrderScreen extends javax.swing.JFrame {
     @Autowired
     private ItemController itemController;
     
-    @Autowired 
-    private OrderRepository repo;
+    @Autowired
+    private OrderItemController orderItemController;
     
     private double grandTotal;
     
@@ -215,22 +218,37 @@ public class OrderScreen extends javax.swing.JFrame {
     */
     private void btnCompleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompleteActionPerformed
         
-        /* Get ordered items from the session */
+//        /* Get ordered items from the session */
+//        List<ItemEntity> orderedItems = ApplicationHelpers.orderedItems;
+
+        OrderEntity order = new OrderEntity();
+        order.setGrandTotal(grandTotal);
+        
+        /* Add a new order */
+        OrderEntity addedOrder = orderController.add(order);
+        
+        /* Add data to order_items table */
         List<ItemEntity> orderedItems = ApplicationHelpers.orderedItems;
         
-        /* Send data to business layer controller */
-        ApplicationMessages result = orderController.add(orderedItems, grandTotal);
+        List<OrderItemEntity> entities = new ArrayList<>();
+        for (ItemEntity item : orderedItems) {
+            
+            OrderItemEntity entity = new OrderItemEntity();
+            
+            entity.setOrderId(addedOrder.getId());
+            entity.setItemId(item.getId());
+            
+            entities.add(entity);
+        }
         
-        // Check if order was added successfully
+        ApplicationMessages result = orderItemController.add(entities);
         if(result == ApplicationMessages.DATA_ADDED)
         {
-            // Show success message
-            JOptionPane.showMessageDialog(this, "Purchase Completed", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Order Completed", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
         else
         {
-            // Show error message
-            JOptionPane.showMessageDialog(this, "Error completing the purchase", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Order Purchase Failed!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCompleteActionPerformed
 

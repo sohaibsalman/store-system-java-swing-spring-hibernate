@@ -16,8 +16,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository repo;
     
     @Override
-    public ApplicationMessages add(OrderEntity order) {
-        repo.save(order);
-        return ApplicationMessages.DATA_ADDED;
+    public OrderEntity add(OrderEntity order) {
+        return repo.save(order);
     }
 }

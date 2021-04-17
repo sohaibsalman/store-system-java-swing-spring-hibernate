@@ -15,24 +15,24 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     
-    public ApplicationMessages add(List<ItemEntity> items, double grandTotal)
+    public OrderEntity add(OrderEntity order)
     {
         
-        OrderEntity order = new OrderEntity();
-        order.setGrandTotal(grandTotal);
-        
-        // Iterate the items list and add items reference to order
-        for (ItemEntity item : items) {
-            
-            ItemEntity temp = new ItemEntity(item);
-            // Add an item to order
-            order.getItems().add(temp);
-            
-//            // Add order reference to item
-//            item.getOrders().add(order);
-        }
-        
-        // Call the Orders Service to add data in DB
+//        OrderEntity order = new OrderEntity();
+//        order.setGrandTotal(grandTotal);
+//        
+//        // Iterate the items list and add items reference to order
+//        for (ItemEntity item : items) {
+//            
+//            ItemEntity temp = new ItemEntity(item);
+//            // Add an item to order
+//            order.getItems().add(temp);
+//            
+////            // Add order reference to item
+////            item.getOrders().add(order);
+//        }
+//        
+//        // Call the Orders Service to add data in DB
         return orderService.add(order);
     }
 }
