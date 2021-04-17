@@ -82,11 +82,11 @@ public class SalesScreen extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Item Info", "Item Details", "Item Extras", "Actions"
+                "ID", "Item Info", "Item Details", "Item Extras"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

@@ -1,10 +1,9 @@
 package com.storesystem.persistence.model;
 
-import java.awt.List;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,11 +46,19 @@ public class ItemEntity  {
     @Column (name = "available_date")
     private Date availableDate;
 
-    @ManyToMany
-    @JoinTable(name = "item_sizes", 
+    @ManyToMany(cascade = {
+        CascadeType.ALL
+    })
+    @JoinTable(
+            name = "item_sizes", 
             joinColumns = {@JoinColumn(name = "item_id")},
             inverseJoinColumns = {@JoinColumn(name = "size_id")})
     private Set<SizeEntity> sizes = new HashSet<>();
+    
+    
+    // Many to many relation for order and items
+    @ManyToMany(mappedBy = "items", cascade = { CascadeType.ALL })
+    private Set<OrdersEntity> orders = new HashSet<OrdersEntity>();
     
     public Long getId() {
         return id;
@@ -133,4 +140,11 @@ public class ItemEntity  {
         this.sizes = sizes;
     }
 
+    public Set<OrdersEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<OrdersEntity> orders) {
+        this.orders = orders;
+    }
 }
