@@ -15,8 +15,8 @@ public class ItemSizeServiceImpl implements ItemSizeService {
 
     @Autowired
     private ItemSizeRepository repo;
-    
-    @Override
+     
+   @Override
     public ApplicationMessages add(List<ItemSizeEntity> list) {
         
         try {
@@ -26,5 +26,9 @@ public class ItemSizeServiceImpl implements ItemSizeService {
         }
         return ApplicationMessages.DATA_ADDED;
     }
-    
+
+    @Override
+    public List<ItemSizeEntity> getAll() {
+        return repo.findAll();
+    }
 }

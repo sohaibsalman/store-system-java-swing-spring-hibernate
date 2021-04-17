@@ -8,4 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ItemSizeService {
     public ApplicationMessages add(List<ItemSizeEntity> list);
+
+    public List<ItemSizeEntity> getAll();
 }

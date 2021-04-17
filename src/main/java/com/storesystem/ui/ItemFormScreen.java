@@ -40,7 +40,7 @@ public class ItemFormScreen extends javax.swing.JFrame {
     
     private List<SizeEntity> sizes;
     
-    private List<SizeEntity> sizeAdded = new ArrayList<>();
+    private List<SizeEntity> sizeAdded;
     
     /** Creates new form ItemFormScreen */
     public ItemFormScreen() {
@@ -345,9 +345,39 @@ public class ItemFormScreen extends javax.swing.JFrame {
                 
                 if(result == ApplicationMessages.DATA_UPDATED)
                 {
-                    // Data updated message
-                    JOptionPane.showMessageDialog(this, "Item Updated", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    adminScreen.InitTable();
+                    // Check if the user has new added sizes for the item, then add it to db
+                    if(chckSize.isSelected() && sizeAdded.size() > 0)
+                    {
+                        List<ItemSizeEntity> list = new ArrayList<>();
+                        // Iterate the size added array and make a list to save it in db
+                        for (SizeEntity size : sizeAdded) {
+                            // Create an object
+                            ItemSizeEntity temp = new ItemSizeEntity();
+
+                            // initialize the object
+                            temp.setItemId(item.getId());
+                            temp.setSizeId(size.getId());
+
+                            // add it to list
+                            list.add(temp);
+                        }
+
+                        ApplicationMessages res = itemSizeController.add(list);
+
+                        if(res == ApplicationMessages.DATA_ADDED)
+                        {
+                            // Data updated message
+                            JOptionPane.showMessageDialog(this, "Item Updated", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            adminScreen.InitTable();
+                        }
+                    }
+                    else 
+                    {
+                        // Data updated message
+                        JOptionPane.showMessageDialog(this, "Item Updated", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        adminScreen.InitTable();
+                    }
+                    
                 }
                 else
                 {
@@ -362,27 +392,33 @@ public class ItemFormScreen extends javax.swing.JFrame {
 
                 // Check if data was added or not
                 if(addedItem != null)
-                {
-//                   
-                    
-                    List<ItemSizeEntity> list = new ArrayList<>();
-                    
-                    // Iterate the size added array and make a list to save it in db
-                    for (SizeEntity size : sizeAdded) {
-                        // Create an object
-                        ItemSizeEntity temp = new ItemSizeEntity();
-                        
-                        // initialize the object
-                        temp.setItemId(addedItem.getId());
-                        temp.setSizeId(size.getId());
-                        
-                        // add it to list
-                        list.add(temp);
+                {              
+                    if(chckSize.isSelected() && sizeAdded.size() > 0)
+                    {
+                        List<ItemSizeEntity> list = new ArrayList<>();
+                        // Iterate the size added array and make a list to save it in db
+                        for (SizeEntity size : sizeAdded) {
+                            // Create an object
+                            ItemSizeEntity temp = new ItemSizeEntity();
+
+                            // initialize the object
+                            temp.setItemId(addedItem.getId());
+                            temp.setSizeId(size.getId());
+
+                            // add it to list
+                            list.add(temp);
+                        }
+
+                        ApplicationMessages result = itemSizeController.add(list);
+
+                        if(result == ApplicationMessages.DATA_ADDED)
+                        {
+                            // Data added message
+                            JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            adminScreen.InitTable();
+                        }
                     }
-                    
-                    ApplicationMessages result = itemSizeController.add(list);
-                    
-                    if(result == ApplicationMessages.DATA_ADDED)
+                    else
                     {
                         // Data added message
                         JOptionPane.showMessageDialog(this, "Item Added", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -451,6 +487,9 @@ public class ItemFormScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_cboxSizesActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // Create list of new added sizes
+        this.sizeAdded = new ArrayList<>();
+
         // Get list of all sizes from DB
         sizes = sizeController.getAllSizes();
         
@@ -459,12 +498,37 @@ public class ItemFormScreen extends javax.swing.JFrame {
             cboxSizes.addItem(Integer.toString(size.getSizeNumber()));
         }
         
+        // Check if form was opened in editing mode
         if(!isEditing)
         {
             chckSize.setSelected(false);
-            // Clear jlist for sizes
             
+            // Clear jlist for sizes
             lstSizes.setModel(new DefaultListModel<>());
+        }
+        else
+        {
+            List<ItemSizeEntity> itemSizeList = itemSizeController.getAll();
+            
+            List<String> temp = new ArrayList<>();
+            
+            Long id = Long.parseLong(lblId.getText());
+            
+            for (ItemSizeEntity itemSize : itemSizeList) {
+                for (SizeEntity size : sizes) {
+                    if(itemSize.getItemId() == id && itemSize.getSizeId() == size.getId())
+                        temp.add(Long.toString(size.getSizeNumber()));
+                }
+            }
+            
+            // Set up data model
+            DefaultListModel model = new DefaultListModel();
+            
+            for (String str : temp) {
+                model.addElement(str);
+            }
+            
+            lstSizes.setModel(model);
         }
     }//GEN-LAST:event_formComponentShown
 

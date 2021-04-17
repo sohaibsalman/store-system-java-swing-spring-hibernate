@@ -18,4 +18,9 @@ public class ItemSizeController {
     {
         return service.add(list);
     }
+    
+    public List<ItemSizeEntity> getAll()
+    {
+        return service.getAll();
+    }
 }
