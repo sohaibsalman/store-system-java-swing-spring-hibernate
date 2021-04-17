@@ -17,4 +17,9 @@ public class OrderItemController  {
     {
         return service.add(orderItems);
     }
+    
+    public List<OrderItemEntity> getAll()
+    {
+        return service.getAll();
+    }
 }

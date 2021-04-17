@@ -8,8 +8,12 @@ import com.storesystem.business.OrderItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import com.storesystem.persistence.model.OrderEntity;
 import com.storesystem.persistence.model.OrderItemEntity;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -175,6 +179,7 @@ public class OrderScreen extends javax.swing.JFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         initTable();
+        initHistoryList();
     }//GEN-LAST:event_formComponentShown
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
@@ -288,6 +293,31 @@ public class OrderScreen extends javax.swing.JFrame {
         tableOrderItems.setRowHeight(80);
     }
 
+    private void initHistoryList() {
+        /* Get All orders history from DB */
+        List<OrderEntity> list = orderController.getAll();
+        
+        DefaultListModel model = new DefaultListModel();
+        
+        for (OrderEntity order : list) {
+            Date orderDate = order.getOrderDate();
+            
+            // Setup the date
+            String month = ApplicationHelpers.months[orderDate.getMonth()];
+            int date = orderDate.getDate();
+            int year = orderDate.getYear() + 1900;
+            
+            int hour = orderDate.getHours();
+            int minutes = orderDate.getMinutes();
+            
+            String stamp = hour > 12 ? "PM" : "AM";
+            
+            // Add the order date to the model
+            model.addElement(month + " " + date + ", " + year + " at " + ((hour % 12)) + ":" + minutes + " " + stamp );
+        }
+        
+        lstOrdersHistory.setModel(model);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -301,5 +331,7 @@ public class OrderScreen extends javax.swing.JFrame {
     private javax.swing.JList<String> lstOrdersHistory;
     private javax.swing.JTable tableOrderItems;
     // End of variables declaration//GEN-END:variables
+
+    
 
 }

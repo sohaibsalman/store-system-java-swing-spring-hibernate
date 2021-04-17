@@ -22,4 +22,9 @@ public class OrderItemServiceImpl implements OrderItemService {
             return ApplicationMessages.DATA_ADDED;
     }
 
+    @Override
+    public List<OrderItemEntity> getAll() {
+        return repo.findAll();
+    }
+
 }
