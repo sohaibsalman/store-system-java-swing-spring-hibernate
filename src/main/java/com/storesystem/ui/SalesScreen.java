@@ -5,6 +5,7 @@ import com.storesystem.business.ItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JButton;
@@ -79,6 +80,8 @@ public class SalesScreen extends javax.swing.JFrame {
         lblUser = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
         lblAccountType = new javax.swing.JLabel();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -211,6 +214,18 @@ public class SalesScreen extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txtSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        btnSearch.setBackground(new java.awt.Color(0, 0, 0));
+        btnSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -222,7 +237,10 @@ public class SalesScreen extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAddOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -230,10 +248,13 @@ public class SalesScreen extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAddOrder, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddOrder, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -313,6 +334,41 @@ public class SalesScreen extends javax.swing.JFrame {
         orderScreen.setVisible(true);
     }//GEN-LAST:event_btnProceedActionPerformed
 
+    
+    /*
+        This function will be called when a user clicks on the search button.
+        If the search text field is empty, all items will be displayed. if a
+        barcode or title is entered and found in the items list, the respective item
+        will be displayed in table
+    */
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        
+        // Show all items if no text is entered in the search text box
+        if(txtSearch.getText().length() == 0)
+        {
+            initTable(true);
+        }
+        else
+        {
+            String text = txtSearch.getText();
+            
+            List<ItemEntity> temp = new ArrayList<>();
+            
+            // find the barcode or title in items
+            for (ItemEntity item : items) {
+                if(item.getBarcode().equals(text) || item.getTitle().equals(text))
+                {
+                    temp.add(item);
+                    break;
+                }
+            }
+            items = temp;
+            
+            // Refresh the table
+            initTable(false);
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
     private void initTable(boolean fetchFormDB)
     {
         if(fetchFormDB)
@@ -363,6 +419,7 @@ public class SalesScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnAddOrder;
     private javax.swing.JButton btnAdminScreen;
     private javax.swing.JButton btnProceed;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -372,6 +429,7 @@ public class SalesScreen extends javax.swing.JFrame {
     private javax.swing.JLabel lblScreenHeading;
     private javax.swing.JLabel lblUser;
     private javax.swing.JTable tableItems;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
     public JButton getBtnAdminScreen() {
