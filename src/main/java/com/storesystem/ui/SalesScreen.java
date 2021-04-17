@@ -57,8 +57,8 @@ public class SalesScreen extends javax.swing.JFrame {
                String accountType = ApplicationHelpers.isAdmin ? "Admin" : "Sales Person";
                lblAccountType.setText(lblAccountType.getText() + " " + accountType); 
                
-               // call function to add data in table
-               initTable();
+               // call function to add data in table by fetchin data from db
+               initTable(true);
             }
         });
     }
@@ -284,6 +284,16 @@ public class SalesScreen extends javax.swing.JFrame {
                 // Add the selected item to the static orders list
                 ApplicationHelpers.orderedItems.add(selectedItem);
                 
+                // Decrease the quantity by one
+                selectedItem.setQuantity(selectedItem.getQuantity() - 1);
+                items.set(selectedRow, selectedItem);
+                
+                // Save the decreased quantity in DB
+                itemController.update(selectedItem);
+                
+                // Refresh the table without fetching data from db
+                initTable(false);
+                
                 // Show success message
                 JOptionPane.showMessageDialog(this, "Item added to order list", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -303,10 +313,13 @@ public class SalesScreen extends javax.swing.JFrame {
         orderScreen.setVisible(true);
     }//GEN-LAST:event_btnProceedActionPerformed
 
-    private void initTable()
+    private void initTable(boolean fetchFormDB)
     {
-        // Get all items from DB by calling the controller
-        items = itemController.getAll();
+        if(fetchFormDB)
+        {
+            // Get all items from DB by calling the controller
+            items = itemController.getAll();
+        }
         
         // create data model for the table
         DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
