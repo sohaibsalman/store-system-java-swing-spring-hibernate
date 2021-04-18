@@ -39,6 +39,11 @@ public class OrderScreen extends javax.swing.JFrame {
     @Autowired
     private OrderScreen orderScreen;
     
+    @Autowired
+    private OrderHistoryScreen orderHistoryScreen;
+    
+    private List<OrderEntity> ordersHistoryList;
+    
     private double grandTotal;
     
     /* Creates new form OrderScreen */
@@ -66,6 +71,7 @@ public class OrderScreen extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        btnViewOrder = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Orders Screen");
@@ -176,6 +182,16 @@ public class OrderScreen extends javax.swing.JFrame {
                 .addContainerGap(41, Short.MAX_VALUE))
         );
 
+        btnViewOrder.setBackground(new java.awt.Color(102, 102, 255));
+        btnViewOrder.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnViewOrder.setForeground(new java.awt.Color(255, 255, 255));
+        btnViewOrder.setText("View Order");
+        btnViewOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewOrderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -185,13 +201,16 @@ public class OrderScreen extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 953, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 960, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnViewOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -200,8 +219,13 @@ public class OrderScreen extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(btnViewOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -295,6 +319,30 @@ public class OrderScreen extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCompleteActionPerformed
 
+    
+    private void btnViewOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderActionPerformed
+        
+        // Get the selected order index from jList
+        int selected = lstOrdersHistory.getSelectedIndex();
+        
+        if(selected >= 0)
+        {
+            OrderEntity order = ordersHistoryList.get(selected);
+            
+            // Set values of the form screen
+            orderHistoryScreen.getLblDate().setText(order.getOrderDate().toString());
+            orderHistoryScreen.getLblID().setText(Long.toString(order.getId()));
+            orderHistoryScreen.getLblTotal().setText("$" + Double.toString(order.getGrandTotal()));
+            
+            // Show the screen
+            orderHistoryScreen.setVisible(true);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Please select an order from the history list.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnViewOrderActionPerformed
+
     private void initTable()
     {
         List<ItemEntity> orderedItems = ApplicationHelpers.orderedItems;
@@ -339,6 +387,8 @@ public class OrderScreen extends javax.swing.JFrame {
         /* Get All orders history from DB */
         List<OrderEntity> list = orderController.getAll();
         
+        this.ordersHistoryList = list;
+        
         DefaultListModel model = new DefaultListModel();
         
         for (OrderEntity order : list) {
@@ -365,6 +415,7 @@ public class OrderScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnComplete;
     private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnViewOrder;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
