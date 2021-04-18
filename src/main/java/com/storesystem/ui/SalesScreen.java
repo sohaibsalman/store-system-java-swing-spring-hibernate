@@ -61,13 +61,6 @@ public class SalesScreen extends javax.swing.JFrame {
         // Add event listener to JFrame to load the table from db
         this.addComponentListener(new ComponentAdapter() {
             public void componentShown(ComponentEvent e) {
-               // Set name of the logged in user
-               lblUser.setText(lblUser.getText() + " " + ApplicationHelpers.username);
-               
-               // Set account type label
-               String accountType = ApplicationHelpers.isAdmin ? "Admin" : "Sales Person";
-               lblAccountType.setText(lblAccountType.getText() + " " + accountType); 
-               
                // call function to add data in table by fetchin data from db
                initTable(true);
             }
@@ -185,7 +178,7 @@ public class SalesScreen extends javax.swing.JFrame {
 
         lblAccountType.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblAccountType.setForeground(new java.awt.Color(255, 255, 255));
-        lblAccountType.setText("Account Type:");
+        lblAccountType.setText("Account Type: ");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -468,10 +461,10 @@ public class SalesScreen extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblAccountType;
-    private javax.swing.JLabel lblDate;
+    public javax.swing.JLabel lblAccountType;
+    public javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblScreenHeading;
-    private javax.swing.JLabel lblUser;
+    public javax.swing.JLabel lblUser;
     private javax.swing.JTable tableItems;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables

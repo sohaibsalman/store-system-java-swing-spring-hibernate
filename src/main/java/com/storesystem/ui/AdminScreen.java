@@ -49,12 +49,18 @@ public class AdminScreen extends javax.swing.JFrame {
     public AdminScreen() {
         initComponents();
         
+        // Set Current Date
+        Date date = new Date();
+        String month = ApplicationHelpers.months[date.getMonth()];
+        int monthDate = date.getDate();
+        int year = date.getYear() + 1900;
+        
+        // Set label text
+        lblDate.setText(lblDate.getText() + " " + month + " " + monthDate + ", " + year);
+        
         // Add event listener to JFrame to load the table from db
         this.addComponentListener(new ComponentAdapter() {
             public void componentShown(ComponentEvent e) {
-                
-               // Show logged in username
-               lblFormHeading.setText(lblFormHeading.getText() + ApplicationHelpers.username);
                InitTable();
             }
         });
@@ -73,6 +79,9 @@ public class AdminScreen extends javax.swing.JFrame {
         btnStore = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblFormHeading = new javax.swing.JLabel();
+        lblDate = new javax.swing.JLabel();
+        lblAccountType = new javax.swing.JLabel();
+        lblUser = new javax.swing.JLabel();
         btnUnavailable = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -158,24 +167,55 @@ public class AdminScreen extends javax.swing.JFrame {
         lblFormHeading.setText("Store Backend – Admin Personnel Login ");
         jPanel3.add(lblFormHeading);
 
+        lblDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblDate.setForeground(new java.awt.Color(255, 255, 255));
+        lblDate.setText("Todays Date:");
+
+        lblAccountType.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccountType.setForeground(new java.awt.Color(255, 255, 255));
+        lblAccountType.setText("Account Type: ");
+
+        lblUser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblUser.setForeground(new java.awt.Color(255, 255, 255));
+        lblUser.setText("Logged in as: ");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblDate)
+                    .addComponent(lblAccountType))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(97, 97, 97)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblUser)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
-                .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblUser)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblAccountType)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDate)))
+                .addGap(19, 19, 19))
         );
 
         btnUnavailable.setBackground(new java.awt.Color(102, 102, 255));
@@ -241,9 +281,6 @@ public class AdminScreen extends javax.swing.JFrame {
         itemFormScreen.setVisible(true);
         itemFormScreen.isEditing = false;
     }//GEN-LAST:event_btnAddActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-    }//GEN-LAST:event_formWindowOpened
 
     /*
         This function will be called when user clicks to edit the item button
@@ -342,6 +379,12 @@ public class AdminScreen extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnUnavailableActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        lblUser.setText(lblUser.getText() + ApplicationHelpers.username);
+        lblFormHeading.setText(lblFormHeading.getText() + " (" + ApplicationHelpers.username + ")");
+        lblAccountType.setText(lblAccountType.getText() + "Admin Account");
+    }//GEN-LAST:event_formWindowOpened
+
     /*
         This function will be called to initialize the admin screen
         table with data. It will call the ItemsController to fetch
@@ -437,7 +480,10 @@ public class AdminScreen extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblFormHeading;
+    public javax.swing.JLabel lblAccountType;
+    private javax.swing.JLabel lblDate;
+    public javax.swing.JLabel lblFormHeading;
+    public javax.swing.JLabel lblUser;
     private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
 }

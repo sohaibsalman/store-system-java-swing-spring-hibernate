@@ -171,7 +171,11 @@ public class LoginScreen extends javax.swing.JFrame {
             */
             salesScreen.getLblScreenHeading().setText(salesScreen.getLblScreenHeading().getText() + "(" + ApplicationHelpers.username + ")");
             
+            salesScreen.lblAccountType.setText(salesScreen.lblAccountType.getText() + (ApplicationHelpers.isAdmin ? "Admin Account" : "Sales person Account"));
+            salesScreen.lblUser.setText(salesScreen.lblUser.getText() + ApplicationHelpers.username);
+            
             salesScreen.setVisible(true);
+            
             this.dispose();
         }
         else if (result == ApplicationMessages.INVALID_PASSWORD)
