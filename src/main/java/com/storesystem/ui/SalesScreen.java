@@ -309,9 +309,6 @@ public class SalesScreen extends javax.swing.JFrame {
                 selectedItem.setQuantity(selectedItem.getQuantity() - 1);
                 items.set(selectedRow, selectedItem);
                 
-                // Save the decreased quantity in DB
-                itemController.update(selectedItem);
-                
                 // Refresh the table without fetching data from db
                 initTable(false);
                 

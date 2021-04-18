@@ -283,39 +283,47 @@ public class OrderScreen extends javax.swing.JFrame {
     */
     private void btnCompleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompleteActionPerformed
         
-        OrderEntity order = new OrderEntity();
-        order.setGrandTotal(grandTotal);
-        
-        /* Add a new order */
-        OrderEntity addedOrder = orderController.add(order);
-        
-        /* Add data to order_items table */
         List<ItemEntity> orderedItems = ApplicationHelpers.orderedItems;
         
-        List<OrderItemEntity> entities = new ArrayList<>();
-        for (ItemEntity item : orderedItems) {
-            
-            OrderItemEntity entity = new OrderItemEntity();
-            
-            entity.setOrderId(addedOrder.getId());
-            entity.setItemId(item.getId());
-            
-            entities.add(entity);
-        }
-        
-        ApplicationMessages result = orderItemController.add(entities);
-        if(result == ApplicationMessages.DATA_ADDED)
+        // Check if there is no item in cart, show error message
+        if(orderedItems == null || orderedItems.size() == 0)
         {
-            JOptionPane.showMessageDialog(this, "Order Completed", "Success", JOptionPane.INFORMATION_MESSAGE);
-            
-            // Close the orders screen
-            this.dispose();
-            
-            orderScreen.setVisible(true);
+            JOptionPane.showMessageDialog(this, "The cart is empty. Please add some items in it to complete the purchase.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Order Purchase Failed!", "Error", JOptionPane.ERROR_MESSAGE);
+            OrderEntity order = new OrderEntity();
+            order.setGrandTotal(grandTotal);
+
+            /* Add a new order */
+            OrderEntity addedOrder = orderController.add(order);
+
+            /* Add data to order_items table */
+            List<OrderItemEntity> entities = new ArrayList<>();
+            for (ItemEntity item : orderedItems) {
+
+                OrderItemEntity entity = new OrderItemEntity();
+
+                entity.setOrderId(addedOrder.getId());
+                entity.setItemId(item.getId());
+
+                entities.add(entity);
+            }
+
+            ApplicationMessages result = orderItemController.add(entities);
+            if(result == ApplicationMessages.DATA_ADDED)
+            {
+                JOptionPane.showMessageDialog(this, "Purchase Completed", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                // Close the orders screen
+                this.dispose();
+
+                orderScreen.setVisible(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Order Purchase Failed!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnCompleteActionPerformed
 
