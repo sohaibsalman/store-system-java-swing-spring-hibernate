@@ -267,6 +267,9 @@ public class OrderScreen extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRemoveActionPerformed
 
+    /*
+        This function closes the order screen without removing items from the cart
+    */
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // close the order screen
         this.dispose();
@@ -313,6 +316,13 @@ public class OrderScreen extends javax.swing.JFrame {
             ApplicationMessages result = orderItemController.add(entities);
             if(result == ApplicationMessages.DATA_ADDED)
             {
+                // Decrease the quantity of items purchased
+                for (ItemEntity item : orderedItems) {
+                    item.setQuantity(item.getQuantity());
+                    itemController.update(item);
+                }
+                
+                // Show success message
                 JOptionPane.showMessageDialog(this, "Purchase Completed", "Success", JOptionPane.INFORMATION_MESSAGE);
 
                 // Close the orders screen
