@@ -91,7 +91,7 @@ public class ItemFormScreen extends javax.swing.JFrame {
         jLabel14.setForeground(new java.awt.Color(255, 0, 51));
         jLabel14.setText("*");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
         addComponentListener(new java.awt.event.ComponentAdapter() {

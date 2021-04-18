@@ -39,6 +39,11 @@ public class LoginScreen extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -164,15 +169,8 @@ public class LoginScreen extends javax.swing.JFrame {
             */
             if(!ApplicationHelpers.isAdmin)
                 salesScreen.getBtnAdminScreen().setVisible(false);
-            
-            /*
-                Set username of logged in person to display it
-                on SalesScreen
-            */
-            salesScreen.getLblScreenHeading().setText(salesScreen.getLblScreenHeading().getText() + "(" + ApplicationHelpers.username + ")");
-            
-            salesScreen.lblAccountType.setText(salesScreen.lblAccountType.getText() + (ApplicationHelpers.isAdmin ? "Admin Account" : "Sales person Account"));
-            salesScreen.lblUser.setText(salesScreen.lblUser.getText() + ApplicationHelpers.username);
+            else
+                salesScreen.getBtnAdminScreen().setVisible(true);
             
             salesScreen.setVisible(true);
             
@@ -183,6 +181,12 @@ public class LoginScreen extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Invalid Credentials", "Credentials Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnLoginMouseClicked
+
+    // Function to Clear the login form fields when the component is shown
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        txtUsername.setText("");
+        txtPassword.setText("");
+    }//GEN-LAST:event_formComponentShown
 
     
     

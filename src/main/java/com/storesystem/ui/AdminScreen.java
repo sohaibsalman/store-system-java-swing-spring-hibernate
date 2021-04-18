@@ -41,6 +41,9 @@ public class AdminScreen extends javax.swing.JFrame {
     @Autowired
     private ItemSizeController itemSizeController;
     
+    @Autowired
+    private LoginScreen loginScreen;
+    
     private List<ItemEntity> items;
     
     /**
@@ -79,15 +82,19 @@ public class AdminScreen extends javax.swing.JFrame {
         btnStore = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblFormHeading = new javax.swing.JLabel();
+        lblUsernameMain = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
-        lblAccountType = new javax.swing.JLabel();
+        label123 = new javax.swing.JLabel();
         lblUser = new javax.swing.JLabel();
+        btnLogout = new javax.swing.JButton();
+        lblUsername = new javax.swing.JLabel();
+        lblAccountType = new javax.swing.JLabel();
         btnUnavailable = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
             }
         });
 
@@ -167,17 +174,40 @@ public class AdminScreen extends javax.swing.JFrame {
         lblFormHeading.setText("Store Backend – Admin Personnel Login ");
         jPanel3.add(lblFormHeading);
 
+        lblUsernameMain.setFont(new java.awt.Font("Brush Script MT", 0, 36)); // NOI18N
+        lblUsernameMain.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsernameMain.setText("Username");
+        jPanel3.add(lblUsernameMain);
+
         lblDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblDate.setForeground(new java.awt.Color(255, 255, 255));
         lblDate.setText("Todays Date:");
 
-        lblAccountType.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblAccountType.setForeground(new java.awt.Color(255, 255, 255));
-        lblAccountType.setText("Account Type: ");
+        label123.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        label123.setForeground(new java.awt.Color(255, 255, 255));
+        label123.setText("Account Type: ");
 
         lblUser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblUser.setForeground(new java.awt.Color(255, 255, 255));
         lblUser.setText("Logged in as: ");
+
+        btnLogout.setBackground(new java.awt.Color(102, 153, 255));
+        btnLogout.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        lblUsername.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblUsername.setForeground(new java.awt.Color(255, 255, 255));
+        lblUsername.setText("username");
+
+        lblAccountType.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccountType.setForeground(new java.awt.Color(255, 255, 255));
+        lblAccountType.setText("type");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -187,17 +217,23 @@ public class AdminScreen extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDate)
-                    .addComponent(lblAccountType))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(label123)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblAccountType))
+                    .addComponent(lblUser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(97, 97, 97)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblUser)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblUsername)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,13 +242,20 @@ public class AdminScreen extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnStore, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 8, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lblUser)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblUser)
+                            .addComponent(lblUsername))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblAccountType)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(label123)
+                            .addComponent(lblAccountType))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblDate)))
                 .addGap(19, 19, 19))
@@ -265,6 +308,7 @@ public class AdminScreen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Function to redirect back to the sales screen
     private void btnStoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStoreActionPerformed
   
         // Set size of sales screen to full screen
@@ -277,6 +321,7 @@ public class AdminScreen extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnStoreActionPerformed
 
+    // Function to open the Item Form to add a new item in database
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         itemFormScreen.setVisible(true);
         itemFormScreen.isEditing = false;
@@ -323,6 +368,7 @@ public class AdminScreen extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
+    // Function to delete the selected item from table and Database
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         
         // Get the index of the selected row from table to delete
@@ -379,11 +425,20 @@ public class AdminScreen extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnUnavailableActionPerformed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        lblUser.setText(lblUser.getText() + ApplicationHelpers.username);
-        lblFormHeading.setText(lblFormHeading.getText() + " (" + ApplicationHelpers.username + ")");
-        lblAccountType.setText(lblAccountType.getText() + "Admin Account");
-    }//GEN-LAST:event_formWindowOpened
+    // function to logout the user and redirect to login screen
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // Close the current screen
+        this.dispose();
+        
+        // Show the login screen
+        loginScreen.setVisible(true);
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        lblUsername.setText(ApplicationHelpers.username);
+        lblUsernameMain.setText("(" + ApplicationHelpers.username + ")");
+        lblAccountType.setText("Admin Account");
+    }//GEN-LAST:event_formComponentShown
 
     /*
         This function will be called to initialize the admin screen
@@ -475,15 +530,19 @@ public class AdminScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnStore;
     private javax.swing.JButton btnUnavailable;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    public javax.swing.JLabel label123;
     public javax.swing.JLabel lblAccountType;
     private javax.swing.JLabel lblDate;
     public javax.swing.JLabel lblFormHeading;
     public javax.swing.JLabel lblUser;
+    public javax.swing.JLabel lblUsername;
+    private javax.swing.JLabel lblUsernameMain;
     private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
 }
