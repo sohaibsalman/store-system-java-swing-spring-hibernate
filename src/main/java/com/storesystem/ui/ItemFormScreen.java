@@ -368,7 +368,14 @@ public class ItemFormScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       
+       // Get list of all sizes from DB
+        sizes = sizeController.getAllSizes();
+        
+        
+        // Init the dropdown for item sizes
+        for (SizeEntity size : sizes) {
+            cboxSizes.addItem(Integer.toString(size.getSizeNumber()));
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -566,14 +573,6 @@ public class ItemFormScreen extends javax.swing.JFrame {
         // Create list of new added sizes
         this.sizeAdded = new ArrayList<>();
 
-        // Get list of all sizes from DB
-        sizes = sizeController.getAllSizes();
-        
-        // Init the dropdown for item sizes
-        for (SizeEntity size : sizes) {
-            cboxSizes.addItem(Integer.toString(size.getSizeNumber()));
-        }
-        
         // Check if form was opened in editing mode
         if(!isEditing)
         {
