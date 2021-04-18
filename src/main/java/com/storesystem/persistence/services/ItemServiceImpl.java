@@ -45,7 +45,8 @@ public class ItemServiceImpl implements ItemService{
         itemInDb.setQuantity(item.getQuantity());
         itemInDb.setDescription(item.getDescription());
         itemInDb.setColor(item.getColor());
-        
+        itemInDb.setAvailableDate(item.getAvailableDate());
+        itemInDb.setUnavailableReason(item.getUnavailableReason());
         
         try {
             repo.save(itemInDb);

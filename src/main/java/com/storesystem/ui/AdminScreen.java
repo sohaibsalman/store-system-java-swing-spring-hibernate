@@ -26,6 +26,11 @@ public class AdminScreen extends javax.swing.JFrame {
     @Autowired
     private ItemController itemController;
     
+    @Autowired
+    private MarkUnavilableScreen markUnavilableScreen;
+    
+    private List<ItemEntity> items;
+    
     /**
      * Creates new form AdminScreen
      */
@@ -56,6 +61,7 @@ public class AdminScreen extends javax.swing.JFrame {
         btnStore = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         lblFormHeading = new javax.swing.JLabel();
+        btnUnavailable = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -159,6 +165,16 @@ public class AdminScreen extends javax.swing.JFrame {
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
+        btnUnavailable.setBackground(new java.awt.Color(102, 102, 255));
+        btnUnavailable.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnUnavailable.setForeground(new java.awt.Color(255, 255, 255));
+        btnUnavailable.setText("Mark item unavailable");
+        btnUnavailable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnavailableActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -173,7 +189,8 @@ public class AdminScreen extends javax.swing.JFrame {
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUnavailable)))
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -185,7 +202,8 @@ public class AdminScreen extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUnavailable, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                 .addContainerGap())
@@ -285,9 +303,31 @@ public class AdminScreen extends javax.swing.JFrame {
         else
         {
             // No row was selected from the table, show error message
-            JOptionPane.showMessageDialog(this, "Please select a row from table first.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select an item from table first.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    /*
+        This function will mark the item unavialbe to purchase
+    */
+    private void btnUnavailableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnavailableActionPerformed
+        int selected = tableItems.getSelectedRow();
+        
+        // Check if any item was selected
+        if(selected >= 0)
+        {
+            // Get selected item
+            ItemEntity item = items.get(selected);
+            
+            markUnavilableScreen.item = item;
+            markUnavilableScreen.setVisible(true);
+        }
+        else
+        {
+            // no item was selected to mark, show error message
+            JOptionPane.showMessageDialog(this, "Please select an item from table first.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUnavailableActionPerformed
 
     /*
         This function will be called to initialize the admin screen
@@ -297,7 +337,7 @@ public class AdminScreen extends javax.swing.JFrame {
     public void InitTable()
     {
         // Get all items from DB by calling the controller
-        List<ItemEntity> items = itemController.getAll();
+        items = itemController.getAll();
         
         // create data model for the table
         DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
@@ -341,6 +381,7 @@ public class AdminScreen extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnStore;
+    private javax.swing.JButton btnUnavailable;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
