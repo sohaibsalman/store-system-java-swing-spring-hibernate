@@ -325,10 +325,13 @@ public class OrderScreen extends javax.swing.JFrame {
                 // Show success message
                 JOptionPane.showMessageDialog(this, "Purchase Completed", "Success", JOptionPane.INFORMATION_MESSAGE);
 
+                // Clear the cart
+                orderedItems.clear();
+                
                 // Close the orders screen
                 this.dispose();
 
-                orderScreen.setVisible(true);
+                salesScreen.setVisible(true);
             }
             else
             {
@@ -417,13 +420,17 @@ public class OrderScreen extends javax.swing.JFrame {
             int date = orderDate.getDate();
             int year = orderDate.getYear() + 1900;
             
-            int hour = orderDate.getHours();
+            int orginalHour = orderDate.getHours();
             int minutes = orderDate.getMinutes();
             
-            String stamp = hour > 12 ? "PM" : "AM";
+            String stamp = orginalHour > 11 ? "PM" : "AM";
+            
+            int hour = orginalHour % 12;
+            if(stamp.equals("PM"))
+                hour += 12;
             
             // Add the order date to the model
-            model.addElement(month + " " + date + ", " + year + " at " + ((hour % 12)) + ":" + minutes + " " + stamp );
+            model.addElement(month + " " + date + ", " + year + " at " + hour + ":" + (minutes < 9 ? "0" + minutes : minutes) + " " + stamp );
         }
         
         lstOrdersHistory.setModel(model);
