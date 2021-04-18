@@ -401,8 +401,15 @@ public class SalesScreen extends javax.swing.JFrame {
             if(reason == null || reason.length() == 0)
                 itemDesc += "N/A";
             else
-                itemDesc += reason;
-            
+            {
+                Date d = item.getAvailableDate();
+                String month = ApplicationHelpers.months[d.getMonth()];
+                int date = d.getDate();
+                int year = d.getYear() + 1900;
+                
+                itemDesc += reason + "<br/>";
+                itemDesc += "Available on: " + month + " " + date + ", " + year;
+            }
             itemDesc += "</html>";
             
             Object [] row = {item.getId(), itemInfo, itemDetails, itemDesc};

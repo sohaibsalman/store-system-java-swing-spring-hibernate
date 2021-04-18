@@ -6,6 +6,7 @@ import com.storesystem.business.ItemController;
 import com.storesystem.persistence.model.ItemEntity;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -80,6 +81,7 @@ public class AdminScreen extends javax.swing.JFrame {
             }
         });
 
+        tableItems.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tableItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -366,7 +368,16 @@ public class AdminScreen extends javax.swing.JFrame {
             if(reason == null || reason.length() == 0)
                 itemDesc += "N/A";
             else
-                itemDesc += reason;
+            {
+                Date d = item.getAvailableDate();
+                String month = ApplicationHelpers.months[d.getMonth()];
+                int date = d.getDate();
+                int year = d.getYear() + 1900;
+                
+                itemDesc += reason + "<br/>";
+                itemDesc += "Available on: " + month + " " + date + ", " + year;
+            }
+                
             
             itemDesc += "</html>";
             
