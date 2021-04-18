@@ -3,9 +3,14 @@ package com.storesystem.ui;
 import com.storesystem.ApplicationHelpers;
 import com.storesystem.ApplicationMessages;
 import com.storesystem.business.ItemController;
+import com.storesystem.business.ItemSizeController;
+import com.storesystem.business.SizeController;
 import com.storesystem.persistence.model.ItemEntity;
+import com.storesystem.persistence.model.ItemSizeEntity;
+import com.storesystem.persistence.model.SizeEntity;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
@@ -29,6 +34,12 @@ public class AdminScreen extends javax.swing.JFrame {
     
     @Autowired
     private MarkUnavilableScreen markUnavilableScreen;
+    
+    @Autowired 
+    private SizeController sizeController;
+    
+    @Autowired
+    private ItemSizeController itemSizeController;
     
     private List<ItemEntity> items;
     
@@ -341,6 +352,12 @@ public class AdminScreen extends javax.swing.JFrame {
         // Get all items from DB by calling the controller
         items = itemController.getAll();
         
+        // Get all sizes
+        List<SizeEntity> sizes = sizeController.getAllSizes();
+        
+        // Get all item-size allocation
+        List<ItemSizeEntity> itemSizeList = itemSizeController.getAll();
+        
         // create data model for the table
         DefaultTableModel model = (DefaultTableModel)tableItems.getModel();
         
@@ -352,12 +369,36 @@ public class AdminScreen extends javax.swing.JFrame {
         
         for (ItemEntity item : items) {
             
+            List<String> itemSizeAlloc = new ArrayList<>();
+            
+            Long id = item.getId();
+            
+            for (ItemSizeEntity itemSize : itemSizeList) {
+                for (SizeEntity size : sizes) {
+                    if(itemSize.getItemId() == id && itemSize.getSizeId() == size.getId())
+                        itemSizeAlloc.add(Long.toString(size.getSizeNumber()));
+                }
+            }
+            
             String itemInfo = "<html> Title: " + item.getTitle() + "<br />"
                     + "Color: " + item.getColor() + "</html>";
             
             String itemDetails = "<html> Barcode: " + item.getBarcode() + "<br />"
-                    + "Quantity: " + item.getQuantity() + "<br />" 
-                    + "Price: $" + item.getPrice() + "</html>";
+                    + "Quantity: " + item.getQuantity() + "<br />" ;
+            
+            if(itemSizeAlloc.size() > 0)
+            {
+                itemDetails += "Sizes: ";
+                int i = 0;
+                for (String str : itemSizeAlloc) {
+                    if(i++ != itemSizeAlloc.size() - 1)
+                        itemDetails += str + ", ";
+                    else
+                        itemDetails += str + "<br />";
+                }
+            }
+            itemDetails += "Price: $" + item.getPrice();
+            itemDetails +=  "</html>";
             
             String itemDesc = "<html> Description: " + item.getDescription() + "<br />"
                     + "<br /> <hr />";
@@ -375,7 +416,7 @@ public class AdminScreen extends javax.swing.JFrame {
                 int year = d.getYear() + 1900;
                 
                 itemDesc += reason + "<br/>";
-                itemDesc += "Available on: " + month + " " + date + ", " + year;
+                itemDesc += "Available on " + month + " " + date + ", " + year;
             }
                 
             
