@@ -1,6 +1,6 @@
 package com.storesystem.persistence.services;
 
-import com.storesystem.ApplicationMessages;
+import com.storesystem.utils.ApplicationMessages;
 import com.storesystem.persistence.model.ItemSizeEntity;
 import com.storesystem.persistence.repository.ItemSizeRepository;
 import java.util.List;

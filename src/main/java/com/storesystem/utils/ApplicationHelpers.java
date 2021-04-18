@@ -1,4 +1,4 @@
-package com.storesystem;
+package com.storesystem.utils;
 
 import com.storesystem.persistence.model.ItemEntity;
 import java.util.ArrayList;

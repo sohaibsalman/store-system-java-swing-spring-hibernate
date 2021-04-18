@@ -1,3 +1,9 @@
+/*
+    This class is an entity for items. It will create the table
+    of items in the db and create all the columns according to the
+    data members mentioned in the class
+*/
+
 package com.storesystem.persistence.model;
 
 import java.util.Date;
@@ -40,6 +46,7 @@ public class ItemEntity  {
     @Column (name = "available_date")
     private Date availableDate;
     
+    // Getter setters for the entity data members
     public Long getId() {
         return id;
     }

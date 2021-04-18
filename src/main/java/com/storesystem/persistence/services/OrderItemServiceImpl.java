@@ -1,6 +1,6 @@
 package com.storesystem.persistence.services;
 
-import com.storesystem.ApplicationMessages;
+import com.storesystem.utils.ApplicationMessages;
 import com.storesystem.persistence.model.OrderItemEntity;
 import com.storesystem.persistence.repository.OrderItemRepository;
 import java.util.List;

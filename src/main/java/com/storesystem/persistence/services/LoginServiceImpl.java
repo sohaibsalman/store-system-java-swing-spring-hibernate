@@ -1,7 +1,7 @@
 package com.storesystem.persistence.services;
 
-import com.storesystem.ApplicationHelpers;
-import com.storesystem.ApplicationMessages;
+import com.storesystem.utils.ApplicationHelpers;
+import com.storesystem.utils.ApplicationMessages;
 import com.storesystem.persistence.model.LoginEntity;
 import com.storesystem.persistence.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;

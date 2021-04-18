@@ -1,3 +1,9 @@
+/*
+    This class is an entity for item-sizes table. It will create the table
+    of item_size in the db and create all the columns according to the
+    data members mentioned in the class
+*/
+
 package com.storesystem.persistence.model;
 
 import javax.persistence.Column;
@@ -22,6 +28,8 @@ public class ItemSizeEntity {
     @Column(name = "size_id")
     private Long sizeId;
 
+    
+    // Getter setters for the entity data members
     public Long getId() {
         return id;
     }

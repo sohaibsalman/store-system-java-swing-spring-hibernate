@@ -1,3 +1,9 @@
+/*
+    This class is an entity for orders. It will create the table
+    of orders in the db and create all the columns according to the
+    data members mentioned in the class
+*/
+
 package com.storesystem.persistence.model;
 
 import java.util.Date;
@@ -26,6 +32,7 @@ public class OrderEntity {
     @Column(name = "grand_total")
     private double grandTotal;
 
+    // Getter setters for the entity data members
     public Long getId() {
         return id;
     }

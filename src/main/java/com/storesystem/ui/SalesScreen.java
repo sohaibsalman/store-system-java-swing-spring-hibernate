@@ -1,6 +1,6 @@
 package com.storesystem.ui;
 
-import com.storesystem.ApplicationHelpers;
+import com.storesystem.utils.ApplicationHelpers;
 import com.storesystem.business.ItemController;
 import com.storesystem.business.ItemSizeController;
 import com.storesystem.business.SizeController;

@@ -1,3 +1,9 @@
+/*
+    This class is an entity for login table. It will create the table
+    of login in the db and create all the columns according to the
+    data members mentioned in the class
+*/
+
 package com.storesystem.persistence.model;
 
 import javax.persistence.Column;
@@ -32,6 +38,8 @@ public class LoginEntity {
     @Column(name="is_admin")
     private boolean isAdmin;
 
+    
+    // Getter setters for the entity data members
     public Long getId() {
         return id;
     }

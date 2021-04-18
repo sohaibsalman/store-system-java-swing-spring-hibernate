@@ -1,3 +1,9 @@
+/*
+    This class is an entity for size. It will create the table
+    of sizes in the db and create all the columns according to the
+    data members mentioned in the class
+*/
+
 package com.storesystem.persistence.model;
 
 import javax.persistence.Column;
@@ -11,8 +17,7 @@ import javax.persistence.Table;
 @Table(name = "sizes")
 public class SizeEntity {
 
-    public SizeEntity() {
-    }
+    public SizeEntity() { }
     
      public SizeEntity(int sizeNumber) {
          this.sizeNumber = sizeNumber;
@@ -25,6 +30,7 @@ public class SizeEntity {
     @Column(name = "size_number")
     private int sizeNumber;
     
+    // Getter setters for the entity data members
     public Long getId() {
         return id;
     }

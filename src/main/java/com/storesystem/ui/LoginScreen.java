@@ -1,7 +1,7 @@
 package com.storesystem.ui;
 
-import com.storesystem.ApplicationHelpers;
-import com.storesystem.ApplicationMessages;
+import com.storesystem.utils.ApplicationHelpers;
+import com.storesystem.utils.ApplicationMessages;
 import com.storesystem.business.LoginController;
 import javax.swing.JOptionPane;
 import org.springframework.beans.factory.annotation.Autowired;

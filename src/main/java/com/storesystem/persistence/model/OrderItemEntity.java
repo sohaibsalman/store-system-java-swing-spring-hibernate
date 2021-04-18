@@ -1,3 +1,9 @@
+/*
+    This class is an entity for order-item-allocation. It will create the table
+    of order_items in the db and create all the columns according to the
+    data members mentioned in the class
+*/
+
 package com.storesystem.persistence.model;
 
 import javax.persistence.Column;
@@ -5,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +26,7 @@ public class OrderItemEntity {
     @Column(name = "item_id")
     private Long itemId;
 
+    // Getter setters for the entity data members
     public Long getId() {
         return id;
     }
@@ -44,6 +50,4 @@ public class OrderItemEntity {
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
-    
-    
 }

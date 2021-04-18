@@ -1,4 +1,4 @@
-package com.storesystem;
+package com.storesystem.utils;
 
 
 public enum ApplicationMessages {
